@@ -6,3 +6,8 @@ Author: Emiliano Jordan,
         https://www.linkedin.com/in/emilianojordan/,
         Most other things I'm @emilianojordan
 """
+
+class BaseAxis:
+
+    def __init__(self, figure, axis):
+        pass

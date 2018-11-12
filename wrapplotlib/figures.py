@@ -8,12 +8,14 @@ Author: Emiliano Jordan,
 """
 from matplotlib import pyplot
 
+from .titles import FigureTitle
 
 class BaseFigure:
 
     def __init__(self, *args, **kwargs):
 
         self._fig = pyplot.figure(*args, **kwargs)
+        self._title = FigureTitle(self)
 
     def __getattr__(self, item):
 
@@ -39,12 +41,21 @@ class BaseFigure:
         return item
 
     def __dir__(self):
-
-        return super().__dir__() + self._fig.__dir__()
+        return list((
+                super(BaseFigure, self).__dir__()
+                + self._fig.__dir__()
+        ))
 
     @property
     def title(self):
-        return 'something'
+        return self._title
+
+    @title.setter
+    def title(self, val):
+        self._title(val)
 
     def close(self):
         pyplot.close(self._fig)
+
+    def save(self, *args, **kwargs):
+        return self._fig.savefig(*args, **kwargs)

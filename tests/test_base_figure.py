@@ -10,10 +10,15 @@ import pytest
 import numpy as np
 from matplotlib import pyplot as plt
 
+import cv2
+
+
 from wrapplotlib.figures import BaseFigure
 
 
 class TestBaseFigure:
+
+    fig_id = None
 
     @classmethod
     def setup_class(cls):
@@ -43,7 +48,7 @@ class TestBaseFigure:
         """
         assert isinstance(self.base_fig, BaseFigure)
 
-        self.id = id(self.base_fig)
+        self.fig_id = id(self.base_fig)
 
     def test_teardown(self):
         """
@@ -52,5 +57,5 @@ class TestBaseFigure:
         :return:
         :rtype:
         """
-        assert self.id != id(self.base_fig)
+        assert self.fig_id != id(self.base_fig)
 
