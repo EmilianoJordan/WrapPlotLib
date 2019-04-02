@@ -6,6 +6,7 @@ Author: Emiliano Jordan,
         https://www.linkedin.com/in/emilianojordan/,
         Most other things I'm @emilianojordan
 """
+from ._mixins import FakeIt
 
 class BaseAxis:
 

@@ -6,45 +6,37 @@ Author: Emiliano Jordan,
         https://www.linkedin.com/in/emilianojordan/,
         Most other things I'm @emilianojordan
 """
-from matplotlib import pyplot
+from matplotlib import use
+from matplotlib import pyplot as plt
 
 from .titles import FigureTitle
+from ._mixins import FakeIt
 
-class BaseFigure:
+class BaseFigure(FakeIt):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, backend="Qt5Agg", *args, **kwargs):
 
-        self._fig = pyplot.figure(*args, **kwargs)
+        # Trying to force matplotlib to use a predictable
+        # backend. It's recommended to use Qt5, WrapPlotLib is tested
+        # on Qt5.
+        try:
+            use(backend)
+        except ImportError:
+            if backend == "Qt5Agg":
+                raise ImportError("Failed to import Qt5. WrapPlotLib "
+                                  "recommends using Qt5 as a backend. "
+                                  "Might try 'pip install PyQt5'")
+            else:
+                raise
+
+        # _fake_it is an internal variable used by the FakeIt class
+        self._fake_it = plt.figure(*args, **kwargs)
+        # This is purely for code readability as _fake_it in this case is an instance of
+        # matplotlib's Figure
+        # https://matplotlib.org/api/_as_gen/matplotlib.figure.Figure.html
+        self._figure = self._fake_it
+
         self._title = FigureTitle(self)
-
-    def __getattr__(self, item):
-
-        def interceptor(attr):
-
-            def wrapper(*args, **kwargs):
-
-                return attr(*args, **kwargs)
-
-            return wrapper
-
-        if item not in self._fig.__dir__():
-
-            raise AttributeError(
-                f"'{self.__class__}' object has no attribute '{item}'"
-            )
-
-        item = getattr(self._fig, item)
-
-        if callable(item):
-            return interceptor(item)
-
-        return item
-
-    def __dir__(self):
-        return list((
-                super(BaseFigure, self).__dir__()
-                + self._fig.__dir__()
-        ))
 
     @property
     def title(self):
@@ -55,7 +47,9 @@ class BaseFigure:
         self._title(val)
 
     def close(self):
-        pyplot.close(self._fig)
+        plt.close(self._figure)
 
     def save(self, *args, **kwargs):
-        return self._fig.savefig(*args, **kwargs)
+        return self._figure.savefig(*args, **kwargs)
+
+
