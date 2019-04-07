@@ -11,7 +11,7 @@ from matplotlib import pyplot as plt
 
 from ._mixins import FakeIt
 from .axes import BaseAxis
-from .titles import FigureTitle
+from .text import WPLText
 
 
 class BaseFigure(FakeIt):
@@ -38,7 +38,7 @@ class BaseFigure(FakeIt):
         # https://matplotlib.org/api/_as_gen/matplotlib.figure.Figure.html
         self._figure = self._fake_it
 
-        self._title = FigureTitle(self)
+        self._title = WPLText(self._figure.suptitle(''))
 
         self._axes = []
 

@@ -49,6 +49,7 @@ class WPLText(FakeIt):
     def size(self, value):
         if isinstance(value, int):
             self._fake_it.set_fontsize(value)
+            return
         if not isinstance(value, str):
             raise TypeError('Size must be a integer size or a str.')
         if not value in ['xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large']:
