@@ -17,14 +17,42 @@ class WPLText(FakeIt):
     def __init__(self, text: Union[str, Text] = ''):
 
         if isinstance(text, str):
-            self._fake_it = Text(text)
+            self._fake_it = Text(text=text)
         elif isinstance(text, Text):
             self._fake_it = text
         else:
             raise AttributeError("WPLText expects a string or matplotlib.text.Text "
                                  "instance for initialization.")
 
-        self._title = self._fake_it
+        self._text = self._fake_it
 
     def __str__(self):
-        self._title.get_text()
+        return self._text.get_text()
+
+    @property
+    def text(self):
+        return self._fake_it.get_text()
+
+    @text.setter
+    def text(self, value):
+        self._fake_it.set_text(value)
+
+    @text.deleter
+    def text(self):
+        self._fake_it.set_text('')
+
+    @property
+    def size(self):
+        return self._fake_it.get_fontsize()
+
+    @size.setter
+    def size(self, value):
+        if isinstance(value, int):
+            self._fake_it.set_fontsize(value)
+        if not isinstance(value, str):
+            raise TypeError('Size must be a integer size or a str.')
+        if not value in ['xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large']:
+            raise ValueError("Valid sizes are 'xx-small', 'x-small', 'small', "
+                             "'medium', 'large', 'x-large', 'xx-large'")
+        self._fake_it.set_fontsize(value)
+        self._fake_it.draw()

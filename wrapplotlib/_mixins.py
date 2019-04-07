@@ -5,6 +5,8 @@ Author: Emiliano Jordan,
         https://www.linkedin.com/in/emilianojordan/,
         Most other things I'm @emilianojordan
 """
+
+
 class FakeIt:
 
     def __getattr__(self, item):
@@ -12,13 +14,11 @@ class FakeIt:
         def interceptor(attr):
 
             def wrapper(*args, **kwargs):
-
                 return attr(*args, **kwargs)
 
             return wrapper
 
         if item not in self._fake_it.__dir__():
-
             raise AttributeError(
                 f"'{self.__class__}' object has no attribute '{item}'"
             )

@@ -9,8 +9,10 @@ Author: Emiliano Jordan,
 from matplotlib import use
 from matplotlib import pyplot as plt
 
-from .titles import FigureTitle
 from ._mixins import FakeIt
+from .axes import BaseAxis
+from .titles import FigureTitle
+
 
 class BaseFigure(FakeIt):
 
@@ -38,13 +40,25 @@ class BaseFigure(FakeIt):
 
         self._title = FigureTitle(self)
 
-    @property
-    def title(self):
-        return self._title
+        self._axes = []
 
-    @title.setter
-    def title(self, val):
-        self._title(val)
+    def __iter__(self):
+        return (a for a in self._axes)
+
+    def add_subplot(self, *args, **kwargs):
+        """
+        https://matplotlib.org/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure.add_subplot
+
+        :param args:
+        :type args:
+        :param kwargs:
+        :type kwargs:
+        :return:
+        :rtype:
+        """
+        axis = BaseAxis(self, self._figure.add_subplot(*args, **kwargs))
+        self._axes.append(axis)
+        return axis
 
     def close(self):
         plt.close(self._figure)
@@ -52,4 +66,35 @@ class BaseFigure(FakeIt):
     def save(self, *args, **kwargs):
         return self._figure.savefig(*args, **kwargs)
 
+    def show(self, close_on_user_input=False, no_close_blocking=False):
+        if close_on_user_input:
+            self._figure.show()
+            plt.waitforbuttonpress()
+        elif no_close_blocking:
+            self._figure.show()
+        else:
+            plt.show()
 
+    @property
+    def title(self):
+        return self._title
+
+    @title.setter
+    def title(self, val):
+        self._title.set_text()
+
+    @title.deleter
+    def title(self):
+        self._title.set_text('')
+
+
+class SingleAxisFigure(BaseFigure):
+
+    def __init__(self, backend="Qt5Agg", *args, **kwargs):
+        super().__init__(backend, *args, **kwargs)
+
+    @property
+    def axis(self):
+        return self._axes[0]
+
+    # @axis.setter

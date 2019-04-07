@@ -5,18 +5,24 @@ Author: Emiliano Jordan,
         https://www.linkedin.com/in/emilianojordan/,
         Most other things I'm @emilianojordan
 """
+from collections import namedtuple
+
 import matplotlib.pyplot as plt
+import numpy as np
 
 from wrapplotlib.figures import BaseFigure
 
-x = [0, 1, 2]
-y = [0, 1, 2]
+ShockData = namedtuple("ShockData", ['time', 'acceleration'])
 
-f = BaseFigure()
+data = np.loadtxt('../tests/data/shock_00.csv', delimiter=',')
+shock_data = ShockData(data[:, 0], data[:, 1])
 
-a = f.add_subplot(1,1,1)
-f.title = "test"
-a.plot(x,y)
-a.set_title("testies")
-f.canvas.draw()
-plt.show()
+fig = BaseFigure()
+a = fig.add_subplot(1, 1, 1)
+fig.title = "Shock Data"
+a.plot(shock_data.time, shock_data.acceleration)
+a.set_title("Basic Shock")
+fig._title.get_position()
+a._title.get_position()
+fig.show()
+fig.show()
