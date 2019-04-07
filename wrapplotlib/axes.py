@@ -9,7 +9,6 @@ Author: Emiliano Jordan,
 from matplotlib.axes import Axes
 
 from ._mixins import FakeIt
-from .titles import AxisTitle
 
 
 class BaseAxis(FakeIt):

@@ -28,9 +28,6 @@ a = fig.add_subplot(1, 1, 1)
 fig.title.text = "Shock Data"
 fig.title.size = 32
 
-print(fig.title.size)
-print(fig.title.get_size())
-
 a.plot(data.time, data.acceleration)
 a.set_title("Basic Shock")
 fig.show()

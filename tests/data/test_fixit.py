@@ -12,7 +12,6 @@ in all the classes it should be. This is a sanity check.
 from wrapplotlib.figures import BaseFigure, SingleAxisFigure
 from wrapplotlib.text import WPLText
 from wrapplotlib.axes import BaseAxis
-from wrapplotlib.titles import FigureTitle, AxisTitle
 
 
 def test_BaseFigure():
@@ -53,22 +52,6 @@ def test_WPLText():
 
 
 def test_BaseAxis():
-    # check that some WPL methods are in __dir__
-
-    # check that some MPL methods are there too.
-
-    pass
-
-
-def test_FigureTitle():
-    # check that some WPL methods are in __dir__
-
-    # check that some MPL methods are there too.
-
-    pass
-
-
-def test_axisTitle():
     # check that some WPL methods are in __dir__
 
     # check that some MPL methods are there too.
