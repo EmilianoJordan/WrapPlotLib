@@ -20,14 +20,17 @@ fig = BaseFigure()
 a = fig.add_subplot(1, 1, 1)
 # title = fig.suptitle('')
 # fig.suptitle('Shock Data')
-# title.set_size(32)
+# title.set_size(32
 # title.set_size(32)
 # fig.title.set_text("Shock Data")
 # fig.title.set_size('xx-large')
 
 fig.title.text = "Shock Data"
-fig.title.size = 32
-
+fig.title.size = 'larger'
+# print(fig.title.size)
+# fig.title.size = 'xx-large'
 a.plot(data.time, data.acceleration)
 a.set_title("Basic Shock")
+for line in a:
+    print(line.get_data())
 fig.show()
