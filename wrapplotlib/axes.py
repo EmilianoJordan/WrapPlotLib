@@ -10,7 +10,7 @@ from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 
 from ._mixins import FakeIt
-from .lines import WPLLine
+from .lines import WPLLine2D
 from .text import WPLText
 
 
@@ -32,8 +32,8 @@ class BaseAxis(FakeIt):
         self._fake_it: Axes = axis
 
         # Setup the Axis Title and wrap in WPLText
-        self._title = WPLText(axis.set_title(''))
-        self._title.x = 0.485
+        self.title = WPLText(axis.set_title(''))
+        self.title.x = 0.485
 
         # Setup the X and Y Labels
         self._xlabel = WPLText(self._fake_it.set_xlabel(''))
@@ -57,7 +57,7 @@ class BaseAxis(FakeIt):
             scaley=scaley,
             **kwargs
         )
-        self._lines += [WPLLine(l) for l in lines]
+        self._lines += [WPLLine2D(l) for l in lines]
         # return lines
 
     @property
@@ -68,18 +68,6 @@ class BaseAxis(FakeIt):
     @lines.deleter
     def lines(self):
         pass
-
-    @property
-    def title(self):
-        return self._title
-
-    @title.setter
-    def title(self, value):
-        self._title.text = value
-
-    @title.deleter
-    def title(self):
-        self._title.text = ''
 
     @property
     def x_label(self):
@@ -140,5 +128,5 @@ class BaseAxis(FakeIt):
     def _sync_mpl_wpl_lines(self):
         for line in self._fake_it.lines:
             if line not in self._lines:
-                self._lines.append(WPLLine(line))
+                self._lines.append(WPLLine2D(line))
 

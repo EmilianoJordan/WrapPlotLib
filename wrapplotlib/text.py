@@ -30,6 +30,12 @@ class WPLText(FakeIt):
 
         # @TODO consider doing a defaults dict for a fall back for deleting things like size.
 
+    def __get__(self, instance, owner):
+        self._fake_it.get_text()
+
+    def __set__(self, instance, value):
+        self._fake_it.set_text(value)
+
     def __str__(self):
         return self._fake_it.get_text()
 

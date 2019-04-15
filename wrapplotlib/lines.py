@@ -7,29 +7,28 @@ Author: Emiliano Jordan,
 """
 from typing import Union
 
-from ._mixins import FakeIt
-
 from matplotlib.lines import Line2D
 
-class WPLLine(FakeIt):
+from ._mixins import FakeIt
+
+class WPLLine2D(FakeIt):
 
     def __init__(self, line: Line2D):
 
-        self._fake_it = line
+        self._fake_it: Line2D = line
 
-    def __eq__(self, other: Union['WPLLine', Line2D]):
+    def __eq__(self, other: Union['WPLLine2D', Line2D]):
         """
         The equality of two lines is based solely on the data
         that defines it.
 
         It may be possible to create conditions based on the axis it
         belongs to and the figure that that belongs to later.
-
         """
         # If the lengths of the data are not the same than we can exit.
         # Lines must have equal length x and y data so checking x length
         # is all that's necessary.
-        if(len(self.data[0]) != len(self.get_data()[0])):
+        if len(self.data[0]) != len(self.get_data()[0]):
             return False
 
         # Check the equality of each set of data. There may be a
@@ -46,3 +45,15 @@ class WPLLine(FakeIt):
     @data.setter
     def data(self, *value):
         self._fake_it.set_data(*value)
+
+    @property
+    def style(self):
+        return self._fake_it.get_linestyle()
+
+    @style.setter
+    def style(self, value):
+        self._fake_it.set_linestyle(value)
+
+    @style.deleter
+    def style(self):
+        self._fake_it.set_linestyle('')

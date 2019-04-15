@@ -16,7 +16,7 @@ from .text import WPLText
 
 class BaseFigure(FakeIt):
 
-    def __init__(self, backend=None, *args, **kwargs):
+    def __init__(self, backend='QtAgg', *args, **kwargs):
 
         if backend is not None:
             use(backend, force=True)
@@ -24,7 +24,7 @@ class BaseFigure(FakeIt):
         # _fake_it is an internal variable used by the FakeIt class
         self._fake_it = plt.figure(*args, **kwargs)
 
-        self._title = WPLText(self._fake_it.suptitle(''))
+        self.title = WPLText(self._fake_it.suptitle(''))
 
         # Need to keep track of axes. Only WPL Axis classes should be
         # added to this list.
@@ -80,23 +80,13 @@ class BaseFigure(FakeIt):
         if get_backend() == 'Qt5Agg':
             self._shown = True
 
-    @property
-    def title(self):
-        return self._title
-
-    @title.setter
-    def title(self, val):
-        self._title.text = val
-
-    @title.deleter
-    def title(self):
-        self._title.text = ''
-
 
 class SingleAxisFigure(BaseFigure):
 
     def __init__(self, backend="Qt5Agg", *args, **kwargs):
         super().__init__(backend, *args, **kwargs)
+
+        self.add_subplot(1,1,1)
 
     @property
     def axis(self):
