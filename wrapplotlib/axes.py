@@ -36,8 +36,8 @@ class BaseAxis(FakeIt):
         self.title.x = 0.485
 
         # Setup the X and Y Labels
-        self._xlabel = WPLText(self._fake_it.set_xlabel(''))
-        self._ylabel = WPLText(self._fake_it.set_ylabel(''))
+        self.x_label = WPLText(self._fake_it.set_xlabel(''))
+        self.y_label = WPLText(self._fake_it.set_ylabel(''))
 
         # Setup the X and Y Scales: This is just setting to defaults
         # but I'm doing this to show where subclassing the scales might
@@ -68,30 +68,6 @@ class BaseAxis(FakeIt):
     @lines.deleter
     def lines(self):
         pass
-
-    @property
-    def x_label(self):
-        return self._xlabel
-
-    @x_label.setter
-    def x_label(self, value):
-        self._xlabel.text = value
-
-    @x_label.deleter
-    def x_label(self):
-        self._xlabel.text = ''
-
-    @property
-    def y_label(self):
-        return self._ylabel
-
-    @y_label.setter
-    def y_label(self, value):
-        self._ylabel.text = value
-
-    @y_label.deleter
-    def y_label(self):
-        self._ylabel.text = ''
 
     @property
     def x_scale(self):

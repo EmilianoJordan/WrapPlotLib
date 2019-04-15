@@ -17,7 +17,17 @@ from .text import WPLText
 class BaseFigure(FakeIt):
 
     def __init__(self, backend='QtAgg', *args, **kwargs):
+        """
 
+        :param backend: One of matplotlib's backends.
+        This defaults to QtAgg as I've noticed fewer rendering
+        errors vs KtAgg in terms of spacing etc.
+        :type backend: str
+        :param args:
+        :type args:
+        :param kwargs:
+        :type kwargs:
+        """
         if backend is not None:
             use(backend, force=True)
         print(get_backend())

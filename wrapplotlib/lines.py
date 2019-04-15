@@ -47,6 +47,72 @@ class WPLLine2D(FakeIt):
         self._fake_it.set_data(*value)
 
     @property
+    def marker(self):
+        return self._fake_it.get_marker()
+
+    @marker.setter
+    def marker(self, value):
+        """
+        Set the marker shape. To see a complete list of possible
+        markers: https://matplotlib.org/api/markers_api.html#module-matplotlib.markers
+        :param value: Marker shape value
+        :type value: str, int
+        """
+        self._fake_it.set_marker(value)
+
+    @marker.deleter
+    def marker(self):
+        self._fake_it.set_marker('')
+
+    @property
+    def marker_edge_color(self):
+        return self._fake_it.get_markeredgecolor()
+
+    @marker_edge_color.setter
+    def marker_edge_color(self, value):
+        self._fake_it.set_markeredgecolor(value)
+
+    @marker_edge_color.deleter
+    def marker_edge_color(self):
+        pass
+
+    @property
+    def marker_edge_width(self):
+        return self._fake_it.get_markeredgewidth()
+
+    @marker_edge_width.setter
+    def marker_edge_width(self, value):
+        self._fake_it.set_markeredgewidth(value)
+
+    @marker_edge_width.deleter
+    def marker_edge_width(self):
+        self._fake_it.set_markeredgewidth(0)
+
+    @property
+    def marker_face_color(self):
+        return self._fake_it.get_markerfacecolor()
+
+    @marker_face_color.setter
+    def marker_face_color(self, value):
+        self._fake_it.set_markerfacecolor(value)
+
+    @marker_face_color.deleter
+    def marker_face_color(self):
+        pass
+
+    @property
+    def marker_size(self):
+        return self._fake_it.get_markersize()
+
+    @marker_size.setter
+    def marker_size(self, value):
+        self._fake_it.set_markersize(value)
+
+    @marker_size.deleter
+    def marker_size(self):
+        self._fake_it.set_markersize(0)
+
+    @property
     def style(self):
         return self._fake_it.get_linestyle()
 
@@ -57,3 +123,23 @@ class WPLLine2D(FakeIt):
     @style.deleter
     def style(self):
         self._fake_it.set_linestyle('')
+
+    @property
+    def width(self):
+        """
+        :return: Width of the line
+        :rtype: float
+        """
+        return self._fake_it.get_linewidth()
+
+    @width.setter
+    def width(self, value):
+        """
+        :param value: Width to set the line to.
+        :type value: float, int
+        """
+        self._fake_it.set_linewidth(value)
+
+    @width.deleter
+    def width(self):
+        self._fake_it.set_linewidth(0)
