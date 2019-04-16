@@ -11,20 +11,36 @@ from matplotlib.lines import Line2D
 
 from ._mixins import FakeIt
 
+
 class WPLLine2D(FakeIt):
 
-    def __init__(self, line: Line2D):
-
+    def __init__(self,
+                 figure: 'BaseFigure',
+                 axis: 'BaseAxis',
+                 styler_values: dict,
+                 line: Line2D):
+        self.figure = figure
+        self.axis = axis
         self._fake_it: Line2D = line
+
+        self.apply_styler(styler_values)
 
     def __eq__(self, other: Union['WPLLine2D', Line2D]):
         """
         The equality of two lines is based solely on the data
         that defines it.
-
-        It may be possible to create conditions based on the axis it
-        belongs to and the figure that that belongs to later.
         """
+        # If the other instance is that of Line2D we can just check to
+        # see if the underlying matplotlib.line.Line2D structure
+        # saved in self._fake_it is the same.
+        if isinstance(other, Line2D):
+            return self._fake_it is other
+
+        # If the line belongs to a different figure or axis it is
+        # probably not the same line, eh?
+        if self.axis is other.axis or self.figure is self.figure:
+            return False
+
         # If the lengths of the data are not the same than we can exit.
         # Lines must have equal length x and y data so checking x length
         # is all that's necessary.
@@ -38,13 +54,25 @@ class WPLLine2D(FakeIt):
         y_equality = (self.data[1] == other.get_data()[1]).all()
         return x_equality and y_equality
 
+    def apply_styler(self, styler_values):
+        for k, v in styler_values.items():
+            setattr(self, k, v)
+
+    @property
+    def color(self):
+        return self._fake_it.get_color()
+
+    @color.setter
+    def color(self, value):
+        self._fake_it.set_color(value)
+
     @property
     def data(self):
         return self._fake_it.get_data()
 
     @data.setter
-    def data(self, *value):
-        self._fake_it.set_data(*value)
+    def data(self, value):
+        self._fake_it.set_data(value)
 
     @property
     def marker(self):
@@ -63,6 +91,17 @@ class WPLLine2D(FakeIt):
     @marker.deleter
     def marker(self):
         self._fake_it.set_marker('')
+
+    @property
+    def marker_color(self):
+        if self.marker_face_color != self.marker_edge_color:
+            return self.marker_face_color, self.marker_edge_color
+        return self.marker_face_color
+
+    @marker_color.setter
+    def marker_color(self, value):
+        self._fake_it.set_markerfacecolor(value)
+        self._fake_it.set_markeredgecolor(value)
 
     @property
     def marker_edge_color(self):

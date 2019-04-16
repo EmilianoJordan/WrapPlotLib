@@ -7,18 +7,16 @@ Author: Emiliano Jordan,
         Most other things I'm @emilianojordan
 """
 from matplotlib.axes import Axes
-from matplotlib.figure import Figure
 
 from ._mixins import FakeIt
 from .lines import WPLLine2D
+from .styles import BaseStyle
 from .text import WPLText
 
 
 class BaseAxis(FakeIt):
 
-    # @TODO Need to figure out figure sizing and the axis y label.
-
-    def __init__(self, figure, axis):
+    def __init__(self, figure, axis, styler=BaseStyle):
         from .figures import BaseFigure
 
         if not isinstance(figure, BaseFigure):
@@ -28,7 +26,7 @@ class BaseAxis(FakeIt):
             raise TypeError('WPL BaseAxis is meant to be initialized with an instance'
                             'of matplotlib.axes.Axes')
 
-        self._parent_figure: Figure = figure
+        self.figure: 'BaseFigure' = figure
         self._fake_it: Axes = axis
 
         # Setup the Axis Title and wrap in WPLText
@@ -46,6 +44,7 @@ class BaseAxis(FakeIt):
         self._add_line = self._fake_it.plot
 
         self._lines = []
+        self._styler = styler()
 
     def __iter__(self):
         return (l for l in self.lines)
@@ -57,8 +56,8 @@ class BaseAxis(FakeIt):
             scaley=scaley,
             **kwargs
         )
-        self._lines += [WPLLine2D(l) for l in lines]
-        # return lines
+        self._lines += [WPLLine2D(self.figure, self, self._styler(), l) for l in lines]
+
 
     @property
     def lines(self):
@@ -104,5 +103,5 @@ class BaseAxis(FakeIt):
     def _sync_mpl_wpl_lines(self):
         for line in self._fake_it.lines:
             if line not in self._lines:
-                self._lines.append(WPLLine2D(line))
+                self._lines.append(WPLLine2D(self.figure, self, line))
 
