@@ -10,13 +10,13 @@ from matplotlib import use, get_backend
 from matplotlib import pyplot as plt
 
 from ._mixins import FakeIt
-from .axes import BaseAxis
+from .plots import BasePlot
 from .text import WPLText
 
 
 class BaseFigure(FakeIt):
 
-    def __init__(self, backend='QtAgg', *args, **kwargs):
+    def __init__(self, backend='Qt5Agg', *args, **kwargs):
         """
 
         :param backend: One of matplotlib's backends.
@@ -30,21 +30,21 @@ class BaseFigure(FakeIt):
         """
         if backend is not None:
             use(backend, force=True)
-        print(get_backend())
+
         # _fake_it is an internal variable used by the FakeIt class
         self._fake_it = plt.figure(*args, **kwargs)
 
-        self.title = WPLText(self._fake_it.suptitle(''))
+        self.__class__.title = WPLText(self._fake_it.suptitle('', size='xx-large'))
 
-        # Need to keep track of axes. Only WPL Axis classes should be
+        # Need to keep track of plots. Only WPL Plot classes should be
         # added to this list.
-        self._axes = []
+        self._plots = []
 
         # See explanation in .show() method for _show property.
         self._shown = False
 
     def __iter__(self):
-        return (a for a in self._axes)
+        return (a for a in self._plots)
 
     def add_subplot(self, *args, **kwargs):
         """
@@ -57,8 +57,8 @@ class BaseFigure(FakeIt):
         :return:
         :rtype:
         """
-        axis = BaseAxis(self, self._fake_it.add_subplot(*args, **kwargs))
-        self._axes.append(axis)
+        axis = BasePlot(self, self._fake_it.add_subplot(*args, **kwargs))
+        self._plots.append(axis)
         return axis
 
     def close(self):
@@ -91,7 +91,7 @@ class BaseFigure(FakeIt):
             self._shown = True
 
 
-class SingleAxisFigure(BaseFigure):
+class SinglePlotFigure(BaseFigure):
 
     def __init__(self, backend="Qt5Agg", *args, **kwargs):
         super().__init__(backend, *args, **kwargs)
@@ -99,7 +99,7 @@ class SingleAxisFigure(BaseFigure):
         self.add_subplot(1,1,1)
 
     @property
-    def axis(self):
-        return self._axes[0]
+    def plot(self):
+        return self._plots[0]
 
-    # @axis.setter
+    # @plot.setter

@@ -9,9 +9,9 @@ This is an important file to make sure that the FixIt Class is included
 in all the classes it should be. This is a sanity check.
 """
 
-from wrapplotlib.figures import BaseFigure, SingleAxisFigure
+from wrapplotlib.figures import BaseFigure, SinglePlotFigure
 from wrapplotlib.text import WPLText
-from wrapplotlib.axes import BaseAxis
+from wrapplotlib.plots import BasePlot
 
 
 def test_BaseFigure():
@@ -27,7 +27,7 @@ def test_BaseFigure():
     assert "waitforbuttonpress" in figure.__dir__()
 
 def test_SinglAxisFigure():
-    figure = SingleAxisFigure()
+    figure = SinglePlotFigure()
     # check that some WPL methods are in __dir__
     assert "add_subplot" in figure.__dir__()
     assert "close" in figure.__dir__()

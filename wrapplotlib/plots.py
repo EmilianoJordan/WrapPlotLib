@@ -14,28 +14,28 @@ from .styles import BaseStyle
 from .text import WPLText
 
 
-class BaseAxis(FakeIt):
+class BasePlot(FakeIt):
 
     def __init__(self, figure, axis, styler=BaseStyle):
         from .figures import BaseFigure
 
         if not isinstance(figure, BaseFigure):
-            raise TypeError('WPL BaseAxis needs a parent figure of wrapplotlib.BaseFigure'
+            raise TypeError('WPL BasePlot needs a parent figure of wrapplotlib.BaseFigure'
                             'or a subclass of BaseFigure to operate properly.')
         if not isinstance(axis, Axes):
-            raise TypeError('WPL BaseAxis is meant to be initialized with an instance'
+            raise TypeError('WPL BasePlot is meant to be initialized with an instance'
                             'of matplotlib.axes.Axes')
 
         self.figure: 'BaseFigure' = figure
         self._fake_it: Axes = axis
 
         # Setup the Axis Title and wrap in WPLText
-        self.title = WPLText(axis.set_title(''))
+        self.__class__.title = WPLText(axis.set_title(''))
         self.title.x = 0.485
 
         # Setup the X and Y Labels
-        self.x_label = WPLText(self._fake_it.set_xlabel(''))
-        self.y_label = WPLText(self._fake_it.set_ylabel(''))
+        self.__class__.x_label = WPLText(self._fake_it.set_xlabel(''))
+        self.__class__.y_label = WPLText(self._fake_it.set_ylabel(''))
 
         # Setup the X and Y Scales: This is just setting to defaults
         # but I'm doing this to show where subclassing the scales might

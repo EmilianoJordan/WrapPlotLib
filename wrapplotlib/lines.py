@@ -16,7 +16,7 @@ class WPLLine2D(FakeIt):
 
     def __init__(self,
                  figure: 'BaseFigure',
-                 axis: 'BaseAxis',
+                 axis: 'BasePlot',
                  styler_values: dict,
                  line: Line2D):
         self.figure = figure
@@ -36,7 +36,7 @@ class WPLLine2D(FakeIt):
         if isinstance(other, Line2D):
             return self._fake_it is other
 
-        # If the line belongs to a different figure or axis it is
+        # If the line belongs to a different figure or plot it is
         # probably not the same line, eh?
         if self.axis is other.axis or self.figure is self.figure:
             return False

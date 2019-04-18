@@ -8,7 +8,7 @@ Author: Emiliano Jordan,
 
 
 class BaseStyle:
-    colors = [
+    colors = (
         (0.0, 0.0, 1.0, 1.0),
         (0.0, 0.5, 0.0, 1.0),
         (1.0, 0.0, 0.0, 1.0),
@@ -16,23 +16,36 @@ class BaseStyle:
         (0.75, 0.0, 0.75, 1.0),
         (0.75, 0.75, 0.0, 1.0),
         (0.0, 0.0, 0.0, 1.0),
-    ]
+    )
+    markers = (
+        "o",
+        "D",
+        ">",
+        "s",
+        "^",
+        "+",
+        "<",
+        "*",
+        "v",
+        "X",
+    )
     style_map = {
         'color': (0.0, 0.0, 0.0, 0.0),
         'line_width': 1,
         'marker': "D",
-        'marker_edge_color': (0.0, 0.0, 0.0, 0.0),
-        'marker_face_color': (1.0, 1.0, 1.0, 1.0),
-        'style': '--'
+        # 'marker_edge_color': (0.0, 0.0, 0.0, 0.0),
+        # 'marker_face_color': (1.0, 1.0, 1.0, 1.0),
+        # 'style': '--'
     }
 
     def __call__(self, *args, **kwargs):
         return self.next()
 
     def __init__(self):
-        self.count = 10
         self.color_index = 0
+        self.marker_index = 0
         self._color_count = len(self.colors)
+        self._marker_count = len(self.markers)
 
     def __iter__(self):
         return self
@@ -41,15 +54,12 @@ class BaseStyle:
         return self.next()
 
     def next(self):
-        c = self.colors[self.color_index % self._color_count]
+        self.style_map['color'] = self.colors[self.color_index % self._color_count]
         self.color_index += 1
 
-        i = (self.count % 10) / 10
+        self.style_map['marker'] = self.markers[self.marker_index % self._marker_count]
 
         if self.color_index % self._color_count == 0:
-            self.count += 1
+            self.marker_index += 1
 
-        color = (c[0], c[1], c[2], c[3] - i)
-        self.style_map['color'] = color
-        self.style_map['marker_edge_color'] = color
         return self.style_map
