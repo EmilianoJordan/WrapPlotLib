@@ -29,3 +29,12 @@ fig.plot.line.color = 'k'
 fig.plot.line.marker = ''
 fig.show()`
 
+![Basic Plot](https://raw.githubusercontent.com/EmilianoJordan/WrapPlotLib/master/examples/single_plot_figures/images/line_styles_after_plotting.png)
+
+
+As you can see settings for the plot that were once hidden behind
+getters and setters are now accessed via the more pythonic way of using
+attributes.
+
+Work is ongoing but there is a way to insert custom style generators
+so that the lines are controllable by you in an OOP, pythonic way.
