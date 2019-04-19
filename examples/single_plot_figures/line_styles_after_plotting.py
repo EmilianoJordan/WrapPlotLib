@@ -1,6 +1,6 @@
 """
-This is going to take advantage of the fact that in wrapplotlib plots
-the most resent plotted line is stored into the line attribute.
+This is going to take advantage of the fact that in WrapPlotLib
+the most resent plotted line is stored into the plot.line attribute.
 It shows how to set line styles accessing the
 wrapplotlib.line.WPLLine2D object directly.
 
