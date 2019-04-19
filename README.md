@@ -10,7 +10,12 @@ Thanks!
 
 Also, here's what WrapPlotLib Looks like. 
 
-`# Need to load some data first.
+```python
+from collections import namedtuple
+import numpy as np
+from wrapplotlib.figures import SinglePlotFigure
+
+# Need to load some data first.
 ShockData = namedtuple("ShockData", ['time', 'acceleration'])
 data = np.loadtxt('../../tests/data/shock_00.csv', delimiter=',')
 shock_data = ShockData(data[:, 0], data[:, 1])
@@ -27,7 +32,8 @@ fig.plot.y_label = "Acceleration (G)"
 # the plot's line attribute. Therefor we can easily access the lines.
 fig.plot.line.color = 'k'
 fig.plot.line.marker = ''
-fig.show()`
+fig.show()
+```
 
 ![Basic Plot](https://raw.githubusercontent.com/EmilianoJordan/WrapPlotLib/master/examples/single_plot_figures/images/line_styles_after_plotting.png)
 
