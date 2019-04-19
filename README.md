@@ -6,9 +6,18 @@ opinion of how I'd want plotting in Python to work. This is a very brief
 attempt to flush out a concept so far. I'm looking for opinions, good
 and constructive, and if you'd like some contributions. 
 
+WPL also is meant to work with the Anaconda distribution and tries to
+use PyQT5. This is because it's the most reliable backend that I've 
+found for matplotlib. The decision to try and enforce this is to try 
+and maintain consistency in plots. I'm sure that I've missed a lot
+as even trying to get .show() to work properly has been a headache just
+between running file through the executable and in the Python console.
+
 Thanks!
 
-Also, here's what WrapPlotLib Looks like. 
+Also, if you're curious here's what WrapPlotLib Looks like:
+
+## WPL Example
 
 ```python
 from collections import namedtuple
