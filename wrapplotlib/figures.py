@@ -11,6 +11,7 @@ from matplotlib import pyplot as plt
 
 from ._mixins import FakeIt
 from .plots import BasePlot
+from .styles import BaseStyle
 from .text import WPLText
 
 
@@ -46,18 +47,19 @@ class BaseFigure(FakeIt):
     def __iter__(self):
         return (a for a in self._plots)
 
-    def add_subplot(self, *args, **kwargs):
+    def add_subplot(self, *args, styler=BaseStyle, **kwargs):
         """
         https://matplotlib.org/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure.add_subplot
-
         :param args:
         :type args:
+        :param styler:
+        :type styler:
         :param kwargs:
         :type kwargs:
         :return:
         :rtype:
         """
-        axis = BasePlot(self, self._fake_it.add_subplot(*args, **kwargs))
+        axis = BasePlot(self, self._fake_it.add_subplot(*args, **kwargs), styler=styler)
         self._plots.append(axis)
         return axis
 
@@ -101,5 +103,3 @@ class SinglePlotFigure(BaseFigure):
     @property
     def plot(self):
         return self._plots[0]
-
-    # @plot.setter

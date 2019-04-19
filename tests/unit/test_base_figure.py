@@ -19,6 +19,17 @@ def test_basic_initialization(shock_data):
     a.set_title("Basic Shock")
 
 def test_dir():
+    """
+    verify the functionality of the base figure dir
+    this will largely fall back on wrapplotlib._mixins.FakeIt
+    """
+    # wrapplotlib.figures.BaseFigure.__dir__() is returning the
+    # proper type.
     fig = BaseFigure()
     assert isinstance(fig.__dir__(), list)
+
+    # wrapplotlib.figures.BaseFigure.__dir__() is returning all
+    # matplotlib.figure.Figure methods and attributes.
+    pyplot_figure = plt.figure()
+    assert set(pyplot_figure.__dir__()).issubset(fig.__dir__())
 

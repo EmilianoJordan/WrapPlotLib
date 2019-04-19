@@ -17,13 +17,13 @@ class WPLLine2D(FakeIt):
     def __init__(self,
                  figure: 'BaseFigure',
                  axis: 'BasePlot',
-                 styler_values: dict,
+                 styler_values: Union[dict, None],
                  line: Line2D):
         self.figure = figure
         self.axis = axis
         self._fake_it: Line2D = line
 
-        self.apply_styler(styler_values)
+        self.apply_styles_from_dict(styler_values)
 
     def __eq__(self, other: Union['WPLLine2D', Line2D]):
         """
@@ -54,7 +54,10 @@ class WPLLine2D(FakeIt):
         y_equality = (self.data[1] == other.get_data()[1]).all()
         return x_equality and y_equality
 
-    def apply_styler(self, styler_values):
+    def apply_styles_from_dict(self, styler_values):
+        if not isinstance(styler_values, dict):
+            return
+
         for k, v in styler_values.items():
             setattr(self, k, v)
 

@@ -8,6 +8,12 @@ Author: Emiliano Jordan,
 
 
 class BaseStyle:
+    """
+    I believe BaseStyle is a perfect chance to learn metaclasses...
+    But ABCs confuse me. Need to learn more about those.
+
+    # @TODO Look into metaclasses for this implementation...
+    """
     colors = (
         (0.0, 0.0, 1.0, 1.0),
         (0.0, 0.5, 0.0, 1.0),
@@ -39,7 +45,7 @@ class BaseStyle:
     }
 
     def __call__(self, *args, **kwargs):
-        return self.next()
+        return self._next()
 
     def __init__(self):
         self.color_index = 0
@@ -51,15 +57,18 @@ class BaseStyle:
         return self
 
     def __next__(self):
-        return self.next()
+        return self._next()
 
-    def next(self):
+    def _next(self):
         self.style_map['color'] = self.colors[self.color_index % self._color_count]
         self.color_index += 1
 
         self.style_map['marker'] = self.markers[self.marker_index % self._marker_count]
-
         if self.color_index % self._color_count == 0:
             self.marker_index += 1
 
         return self.style_map
+
+    def reset(self):
+        self.color_index = 0
+        self.marker_index = 0

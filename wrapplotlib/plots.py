@@ -46,6 +46,9 @@ class BasePlot(FakeIt):
         self._lines = []
         self._styler = styler()
 
+    def __call__(self, *args, scalex=True, scaley=True, **kwargs):
+        self.plot(*args, scalex=True, scaley=True, **kwargs)
+
     def __iter__(self):
         return (l for l in self.lines)
 
@@ -56,8 +59,19 @@ class BasePlot(FakeIt):
             scaley=scaley,
             **kwargs
         )
-        self._lines += [WPLLine2D(self.figure, self, self._styler(), l) for l in lines]
+        if self._styler is None:
+            self._lines += [WPLLine2D(self.figure, self, None, l) for l in lines]
+        else:
+            self._lines += [WPLLine2D(self.figure, self, self._styler(), l) for l in lines]
 
+    @property
+    def line(self):
+        return self.lines[-1]
+
+    @line.deleter
+    def line(self):
+        # @TODO need to edit this method once it's figured out how I'm going to delete lines.
+        pass
 
     @property
     def lines(self):
@@ -67,6 +81,29 @@ class BasePlot(FakeIt):
     @lines.deleter
     def lines(self):
         pass
+
+    @property
+    def styler(self):
+        return self._styler
+
+    @styler.setter
+    def styler(self, value: BaseStyle):
+        styler = value()
+        if not callable(styler):
+            raise BaseException('Styler needs to be a callable object. See __call__')
+        if not isinstance(styler(), dict):
+            raise BaseException('Styler needs to return a dict of key value pairs for WPLLine '
+                                'attributes')
+        if not hasattr(styler, 'reset') and callable(styler.reset):
+            raise BaseException('Styler needs to have a reset method that resets the order '
+                                'of the styles being generated. This is called when '
+                                'replotting to make sure lines maintain style order.')
+        styler.reset()
+        self._styler = styler
+
+    @styler.deleter
+    def styler(self):
+        self._styler = None
 
     @property
     def x_scale(self):
