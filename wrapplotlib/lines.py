@@ -16,14 +16,18 @@ class WPLLine2D(FakeIt):
 
     def __init__(self,
                  figure: 'BaseFigure',
-                 axis: 'BasePlot',
-                 styler_values: Union[dict, None],
+                 plot: 'BasePlot',
+                 style_dict: Union[dict, None],
                  line: Line2D):
         self.figure = figure
-        self.axis = axis
+        self.plot = plot
         self._fake_it: Line2D = line
 
-        self.apply_styles_from_dict(styler_values)
+        self.apply_styles_from_dict(style_dict)
+
+    def __del__(self):
+        self._fake_it.remove()
+        del self._fake_it
 
     def __eq__(self, other: Union['WPLLine2D', Line2D]):
         """
@@ -36,23 +40,25 @@ class WPLLine2D(FakeIt):
         if isinstance(other, Line2D):
             return self._fake_it is other
 
-        # If the line belongs to a different figure or plot it is
-        # probably not the same line, eh?
-        if self.axis is other.axis or self.figure is self.figure:
-            return False
-
-        # If the lengths of the data are not the same than we can exit.
-        # Lines must have equal length x and y data so checking x length
-        # is all that's necessary.
-        if len(self.data[0]) != len(self.get_data()[0]):
-            return False
-
-        # Check the equality of each set of data. There may be a
-        # tolerance problem here in rounding errors, but for now
-        # let's assume that's not the case.
-        x_equality = (self.data[0] == other.get_data()[0]).all()
-        y_equality = (self.data[1] == other.get_data()[1]).all()
-        return x_equality and y_equality
+        return self._fake_it is other._fake_it
+        #
+        # # If the line belongs to a different figure or plot it is
+        # # probably not the same line, eh?
+        # if self.plot is other.plot or self.figure is self.figure:
+        #     return False
+        #
+        # # If the lengths of the data are not the same than we can exit.
+        # # Lines must have equal length x and y data so checking x length
+        # # is all that's necessary.
+        # if len(self.data[0]) != len(self.get_data()[0]):
+        #     return False
+        #
+        # # Check the equality of each set of data. There may be a
+        # # tolerance problem here in rounding errors, but for now
+        # # let's assume that's not the case.
+        # x_equality = (self.data[0] == other.get_data()[0]).all()
+        # y_equality = (self.data[1] == other.get_data()[1]).all()
+        # return x_equality and y_equality
 
     def apply_styles_from_dict(self, styler_values):
         if not isinstance(styler_values, dict):
@@ -76,6 +82,19 @@ class WPLLine2D(FakeIt):
     @data.setter
     def data(self, value):
         self._fake_it.set_data(value)
+
+    @property
+    def label(self):
+        return self._fake_it.get_label()
+
+    @label.setter
+    def label(self, value):
+        self._fake_it.set_label(value)
+        self.plot.legend()
+
+    @label.deleter
+    def label(self):
+        self._fake_it.set_label(None)
 
     @property
     def marker(self):

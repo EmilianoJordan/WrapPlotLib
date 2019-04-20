@@ -41,7 +41,6 @@ class BasePlot(FakeIt):
         # but I'm doing this to show where subclassing the scales might
         # be done.
         self._type = ["Linear", "Linear"]
-        self._add_line = self._fake_it.plot
 
         self._lines = []
         self._styler = styler()
@@ -71,7 +70,7 @@ class BasePlot(FakeIt):
     @line.deleter
     def line(self):
         # @TODO need to edit this method once it's figured out how I'm going to delete lines.
-        pass
+        del self.lines[-1]
 
     @property
     def lines(self):
@@ -80,7 +79,8 @@ class BasePlot(FakeIt):
 
     @lines.deleter
     def lines(self):
-        pass
+        [l.__del__() for l in self._lines]
+        self._lines = []
 
     @property
     def styler(self):
@@ -140,5 +140,5 @@ class BasePlot(FakeIt):
     def _sync_mpl_wpl_lines(self):
         for line in self._fake_it.lines:
             if line not in self._lines:
-                self._lines.append(WPLLine2D(self.figure, self, line))
-
+                self._lines.append(WPLLine2D(self.figure, self,
+                                             None, line))

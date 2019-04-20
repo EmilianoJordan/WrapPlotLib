@@ -102,4 +102,4 @@ class SinglePlotFigure(BaseFigure):
 
     @property
     def plot(self):
-        return self._plots[0]
+        return self._plots[-1]
