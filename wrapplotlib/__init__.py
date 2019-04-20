@@ -6,3 +6,6 @@ Author: Emiliano Jordan,
         https://www.linkedin.com/in/emilianojordan/,
         Most other things I'm @emilianojordan
 """
+import logging
+
+log = logging.getLogger(__name__)

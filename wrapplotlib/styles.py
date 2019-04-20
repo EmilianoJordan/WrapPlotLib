@@ -5,14 +5,62 @@ Author: Emiliano Jordan,
         https://www.linkedin.com/in/emilianojordan/,
         Most other things I'm @emilianojordan
 """
+from abc import ABCMeta, abstractmethod
 
 
-class BaseStyle:
+class StyleMeta(metaclass=ABCMeta):
+
+    @abstractmethod
+    def __call__(self):
+        """
+        The __call__ method should return the next set of styles in a
+        dict. No parameters are passed into __call__. The
+        __call__ and __next__ functions should return the same values
+        and maintain the same internal state after being called.
+
+        :return: Return a dict where the keys are attributes from
+        wrapplotlib.lines.WPLLine2D and values are valid for the
+        associated attribute.
+        :rtype: dict
+        """
+        pass
+
+    def __iter__(self):
+        return self
+
+    @abstractmethod
+    def __next__(self):
+        """
+        The __next__ method should return the next set of styles in a
+        dict. No parameters are passed into __next__. The
+        __call__ and __next__ functions should return the same values
+        and maintain the same internal state after being called.
+
+        :return: Return a dict where the keys are attributes from
+        wrapplotlib.lines.WPLLine2D and values are valid for the
+        associated attribute.
+        :rtype: dict
+        """
+
+    @abstractmethod
+    def reset(self):
+        """
+        The reset method should reset the internal state so that the
+        __next__ and __call__ methods being returning values from the
+        first value on.
+
+        This method is used when redrawing plots. So it's important
+        for this to be true.
+        :return:
+        :rtype:
+        """
+        pass
+
+
+class BaseStyle(StyleMeta):
     """
     I believe BaseStyle is a perfect chance to learn metaclasses...
     But ABCs confuse me. Need to learn more about those.
-
-    # @TODO Look into metaclasses for this implementation...
     """
     colors = (
         (0.0, 0.0, 1.0, 1.0),
@@ -52,9 +100,6 @@ class BaseStyle:
         self.marker_index = 0
         self._color_count = len(self.colors)
         self._marker_count = len(self.markers)
-
-    def __iter__(self):
-        return self
 
     def __next__(self):
         return self._next()

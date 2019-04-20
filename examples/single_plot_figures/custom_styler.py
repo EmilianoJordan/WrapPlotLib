@@ -13,12 +13,16 @@ from collections import namedtuple
 import numpy as np
 
 from wrapplotlib.figures import SinglePlotFigure
-from wrapplotlib.styles import BaseStyle
+from wrapplotlib.styles import StyleMeta
 
 
-class CustomStyle(BaseStyle):
+class CustomStyle(StyleMeta):
     """
-    Custom Styler will yield a black line ever single call.
+    This simple Custom Styler will only ever yield a black line.
+
+    For a more complex implementation of a Custom Styler see
+    wrapplotlib.styles.BaseStyle
+
     """
     style_map = {
         'color': (0.0, 0.0, 0.0, 1.0),
@@ -31,7 +35,7 @@ class CustomStyle(BaseStyle):
     def __call__(self, *args, **kwargs):
         return self.style_map
 
-    def next(self):
+    def __next__(self):
         return self.style_map
 
     def reset(self):

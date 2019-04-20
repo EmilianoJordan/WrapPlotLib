@@ -5,13 +5,23 @@ Author: Emiliano Jordan,
         https://www.linkedin.com/in/emilianojordan/,
         Most other things I'm @emilianojordan
 """
+from abc import ABCMeta
 from matplotlib.artist import Artist
 
 from ._mixins import FakeIt
 
 
-class WPLArtist(FakeIt):
+class WPLArtist(FakeIt, metaclass=ABCMeta):
+    """
+    The WPLArtist class is never meant to be initialized itself.
+    It provides some basic attributes to all classes that subclass the
+    WPLArtist class. So far attributes that have been implemented are:
 
+    .label
+    .visible
+    .alpha
+
+    """
     _fake_it: Artist
 
     def _get_label(self):

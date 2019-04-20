@@ -8,9 +8,10 @@ Author: Emiliano Jordan,
 """
 from matplotlib.axes import Axes
 
+from . import log
 from .artists import WPLArtist
 from .lines import WPLLine2D
-from .styles import BaseStyle
+from .styles import BaseStyle, StyleMeta
 from .text import WPLText
 
 
@@ -63,79 +64,94 @@ class BasePlot(WPLArtist):
         else:
             self._lines += [WPLLine2D(self.figure, self, self._styler(), l) for l in lines]
 
-    @property
-    def line(self):
+    def _get_line(self):
         return self.lines[-1]
 
-    @line.deleter
-    def line(self):
-        # @TODO need to edit this method once it's figured out how I'm going to delete lines.
+    def _set_line(self, value):
+        log.warning("line setter is not implemented as this is"
+                    "an internally tracked variable.")
+
+    def _del_line(self):
         del self.lines[-1]
 
-    @property
-    def lines(self):
+    line = property(
+        fget=lambda self: self._get_line(),
+        fset=lambda self: self._set_line(),
+        fdel=lambda self: self._del_line()
+    )
+
+    def _get_lines(self):
         self._sync_mpl_wpl_lines()
         return self._lines
 
-    @lines.deleter
-    def lines(self):
+    def _set_lines(self, value):
+        log.warning("lines setter is not implemented as this is"
+                    "an internally tracked variable.")
+
+    def _del_lines(self):
         [l.__del__() for l in self._lines]
         self._lines = []
 
-    @property
-    def styler(self):
+    lines = property(
+        fget=lambda self: self._get_lines(),
+        fset=lambda self, value: self._set_lines(value),
+        fdel=lambda self: self._del_lines()
+    )
+
+    def _get_styler(self):
         return self._styler
 
-    @styler.setter
-    def styler(self, value: BaseStyle):
-        styler = value()
-        if not callable(styler):
-            raise BaseException('Styler needs to be a callable object. See __call__')
-        if not isinstance(styler(), dict):
-            raise BaseException('Styler needs to return a dict of key value pairs for WPLLine '
-                                'attributes')
-        if not hasattr(styler, 'reset') and callable(styler.reset):
-            raise BaseException('Styler needs to have a reset method that resets the order '
-                                'of the styles being generated. This is called when '
-                                'replotting to make sure lines maintain style order.')
-        styler.reset()
-        self._styler = styler
+    def _set_styler(self, value):
+        if not issubclass(value, StyleMeta):
+            raise TypeError('A Style needs to be derived from wrapplotlib.styles.StyleMeta '
+                            'this is to ensure that the styler works as expected within the'
+                            'rest of WPL classes.')
+        self._styler = value()
 
-    @styler.deleter
-    def styler(self):
+    def _del_styler(self):
         self._styler = None
 
-    @property
-    def x_scale(self):
+    styler = property(
+        fget=lambda self: self._get_styler(),
+        fset=lambda self, value: self._set_styler(value),
+        fdel=lambda self: self._del_styler()
+    )
+
+    def _get_x_scale(self):
         return self._type[0]
 
-    @x_scale.setter
-    def x_scale(self, value: str):
-        if value.lower() in ['linear', 'log']:
-            self._type[0] = value
-            return
-        raise ("Error in setting x_scale property. Valid values are "
-               "'Linear' or 'Log")
+    def _set_x_scale(self, value):
+        if value.lower() not in ['linear', 'log']:
+            raise ("Error in setting x_scale property. Valid values are "
+                   "'Linear' or 'Log")
+        self._type[0] = value.lower()
 
-    @x_scale.deleter
-    def x_scale(self):
+    def _del_x_scale(self):
         self._type[0] = 'Linear'
 
-    @property
-    def y_scale(self):
+    x_scale = property(
+        fget=lambda self: self._get_x_scale(),
+        fset=lambda self, value: self._set_x_scale(value),
+        fdel=lambda self: self._del_x_scale()
+    )
+
+    def _get_y_scale(self):
         return self._type[1]
 
-    @y_scale.setter
-    def y_scale(self, value: str):
-        if value.lower() in ['linear', 'log']:
-            self._type[1] = value
-            return
-        raise ("Error in setting y_scale property. Valid values are "
-               "'Linear' or 'Log")
+    def _set_y_scale(self, value):
+        if value.lower() not in ['linear', 'log']:
+            raise ("Error in setting y_scale property. Valid values are "
+                   "'Linear' or 'Log")
+        self._type[1] = value
 
-    @y_scale.deleter
-    def y_scale(self):
+    def _del_y_scale(self):
         self._type[1] = 'Linear'
+
+    y_scale = property(
+        fget=lambda self: self._get_y_scale(),
+        fset=lambda self, value: self._set_y_scale(value),
+        fdel=lambda self: self._del_y_scale()
+    )
 
     def _sync_mpl_wpl_lines(self):
         for line in self._fake_it.lines:
