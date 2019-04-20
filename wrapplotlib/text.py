@@ -9,10 +9,10 @@ from typing import Union
 
 from matplotlib.text import Text
 
-from ._mixins import FakeIt
+from .artists import WPLArtist
 
 
-class WPLText(FakeIt):
+class WPLText(WPLArtist):
     """
     WrapPlotLib's Version of matplotlib.text.Text
 

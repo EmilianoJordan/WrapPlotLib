@@ -10,12 +10,13 @@ from matplotlib import use, get_backend
 from matplotlib import pyplot as plt
 
 from ._mixins import FakeIt
+from .artists import WPLArtist
 from .plots import BasePlot
 from .styles import BaseStyle
 from .text import WPLText
 
 
-class BaseFigure(FakeIt):
+class BaseFigure(WPLArtist):
 
     def __init__(self, backend='Qt5Agg', *args, **kwargs):
         """

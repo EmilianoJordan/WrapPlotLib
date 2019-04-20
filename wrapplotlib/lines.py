@@ -9,10 +9,10 @@ from typing import Union
 
 from matplotlib.lines import Line2D
 
-from ._mixins import FakeIt
+from .artists import WPLArtist
 
 
-class WPLLine2D(FakeIt):
+class WPLLine2D(WPLArtist):
 
     def __init__(self,
                  figure: 'BaseFigure',
@@ -27,7 +27,7 @@ class WPLLine2D(FakeIt):
 
     def __del__(self):
         self._fake_it.remove()
-        del self._fake_it
+        super().__del__()
 
     def __eq__(self, other: Union['WPLLine2D', Line2D]):
         """
@@ -83,18 +83,10 @@ class WPLLine2D(FakeIt):
     def data(self, value):
         self._fake_it.set_data(value)
 
-    @property
-    def label(self):
-        return self._fake_it.get_label()
-
-    @label.setter
-    def label(self, value):
-        self._fake_it.set_label(value)
+    # Overrides the WPLArtist.label setter.
+    def _set_label(self, value):
+        super()._set_label(value)
         self.plot.legend()
-
-    @label.deleter
-    def label(self):
-        self._fake_it.set_label(None)
 
     @property
     def marker(self):

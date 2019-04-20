@@ -35,3 +35,6 @@ class FakeIt:
             list(self._fake_it.__dir__())
             + list(super().__dir__())
         ))
+
+    def __del__(self):
+        del self._fake_it

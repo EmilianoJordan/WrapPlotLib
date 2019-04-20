@@ -8,13 +8,13 @@ Author: Emiliano Jordan,
 """
 from matplotlib.axes import Axes
 
-from ._mixins import FakeIt
+from .artists import WPLArtist
 from .lines import WPLLine2D
 from .styles import BaseStyle
 from .text import WPLText
 
 
-class BasePlot(FakeIt):
+class BasePlot(WPLArtist):
 
     def __init__(self, figure, axis, styler=BaseStyle):
         from .figures import BaseFigure
