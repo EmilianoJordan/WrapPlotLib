@@ -74,10 +74,11 @@ class BasePlot(WPLArtist):
     def _del_line(self):
         del self.lines[-1]
 
+    # noinspection PyPropertyDefinition
     line = property(
         fget=lambda self: self._get_line(),
-        fset=lambda self: self._set_line(),
-        fdel=lambda self: self._del_line()
+        fdel=lambda self: self._del_line(),
+        fset=lambda self: self._set_line()
     )
 
     def _get_lines(self):
@@ -92,6 +93,7 @@ class BasePlot(WPLArtist):
         [l.__del__() for l in self._lines]
         self._lines = []
 
+    # noinspection PyPropertyDefinition
     lines = property(
         fget=lambda self: self._get_lines(),
         fset=lambda self, value: self._set_lines(value),
@@ -111,6 +113,7 @@ class BasePlot(WPLArtist):
     def _del_styler(self):
         self._styler = None
 
+    # noinspection PyPropertyDefinition
     styler = property(
         fget=lambda self: self._get_styler(),
         fset=lambda self, value: self._set_styler(value),
@@ -129,6 +132,7 @@ class BasePlot(WPLArtist):
     def _del_x_scale(self):
         self._type[0] = 'Linear'
 
+    # noinspection PyPropertyDefinition
     x_scale = property(
         fget=lambda self: self._get_x_scale(),
         fset=lambda self, value: self._set_x_scale(value),
@@ -147,6 +151,7 @@ class BasePlot(WPLArtist):
     def _del_y_scale(self):
         self._type[1] = 'Linear'
 
+    # noinspection PyPropertyDefinition
     y_scale = property(
         fget=lambda self: self._get_y_scale(),
         fset=lambda self, value: self._set_y_scale(value),

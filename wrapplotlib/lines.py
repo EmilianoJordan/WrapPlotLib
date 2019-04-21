@@ -9,6 +9,7 @@ from typing import Union
 
 from matplotlib.lines import Line2D
 
+from . import log
 from .artists import WPLArtist
 
 
@@ -67,33 +68,47 @@ class WPLLine2D(WPLArtist):
         for k, v in styler_values.items():
             setattr(self, k, v)
 
-    @property
-    def color(self):
+    def _get_color(self):
         return self._fake_it.get_color()
 
-    @color.setter
-    def color(self, value):
+    def _set_color(self, value):
         self._fake_it.set_color(value)
 
-    @property
-    def data(self):
+    def _del_color(self):
+        log.warning("color deleter is not implemented.")
+
+    # noinspection PyPropertyDefinition
+    color = property(
+        fget=lambda self: self._get_color(),
+        fset=lambda self, value: self._set_color(value),
+        fdel=lambda self: self._del_color()
+    )
+
+    def _get_data(self):
         return self._fake_it.get_data()
 
-    @data.setter
-    def data(self, value):
+    def _set_data(self, value):
         self._fake_it.set_data(value)
+
+    def _del_data(self):
+        log.warning(".data deleter hasn't been implemented.")
+
+    # noinspection PyPropertyDefinition
+    data = property(
+        fget=lambda self: self._get_data(),
+        fset=lambda self, value: self._set_data(value),
+        fdel=lambda self: self._del_data()
+    )
 
     # Overrides the WPLArtist.label setter.
     def _set_label(self, value):
         super()._set_label(value)
         self.plot.legend()
 
-    @property
-    def marker(self):
+    def _get_marker(self):
         return self._fake_it.get_marker()
 
-    @marker.setter
-    def marker(self, value):
+    def _set_marker(self, value):
         """
         Set the marker shape. To see a complete list of possible
         markers: https://matplotlib.org/api/markers_api.html#module-matplotlib.markers
@@ -102,97 +117,135 @@ class WPLLine2D(WPLArtist):
         """
         self._fake_it.set_marker(value)
 
-    @marker.deleter
-    def marker(self):
+    def _del_marker(self):
         self._fake_it.set_marker('')
 
-    @property
-    def marker_color(self):
+    # noinspection PyPropertyDefinition
+    marker = property(
+        fget=lambda self: self._get_marker(),
+        fset=lambda self, value: self._set_marker(value),
+        fdel=lambda self: self._del_marker()
+    )
+
+    def _get_marker_color(self):
         if self.marker_face_color != self.marker_edge_color:
             return self.marker_face_color, self.marker_edge_color
         return self.marker_face_color
 
-    @marker_color.setter
-    def marker_color(self, value):
+    def _set_marker_color(self, value):
         self._fake_it.set_markerfacecolor(value)
         self._fake_it.set_markeredgecolor(value)
 
-    @property
-    def marker_edge_color(self):
+    def _del_marker_color(self):
+        log.warning("marker_color deleter hasn't been implemented.")
+
+    # noinspection PyPropertyDefinition
+    marker_color = property(
+        fget=lambda self: self._get_marker_color(),
+        fset=lambda self, value: self._set_marker_color(value),
+        fdel=lambda self: self._del_marker_color()
+    )
+
+    def _get_marker_edge_color(self):
         return self._fake_it.get_markeredgecolor()
 
-    @marker_edge_color.setter
-    def marker_edge_color(self, value):
+    def _set_marker_edge_color(self, value):
         self._fake_it.set_markeredgecolor(value)
 
-    @marker_edge_color.deleter
-    def marker_edge_color(self):
-        pass
+    def _del_marker_edge_color(self):
+        log.warning('marker_edge_color deleter is not implemented')
 
-    @property
-    def marker_edge_width(self):
+    # noinspection PyPropertyDefinition
+    marker_edge_color = property(
+        fget=lambda self: self._get_marker_edge_color(),
+        fset=lambda self, value: self._set_marker_edge_color(value),
+        fdel=lambda self: self._del_marker_edge_color()
+    )
+
+    def _get_marker_edge_width(self):
         return self._fake_it.get_markeredgewidth()
 
-    @marker_edge_width.setter
-    def marker_edge_width(self, value):
+    def _set_marker_edge_width(self, value):
         self._fake_it.set_markeredgewidth(value)
 
-    @marker_edge_width.deleter
-    def marker_edge_width(self):
+    def _del_marker_edge_width(self):
         self._fake_it.set_markeredgewidth(0)
 
-    @property
-    def marker_face_color(self):
+    # noinspection PyPropertyDefinition
+    marker_edge_width = property(
+        fget=lambda self: self._get_marker_edge_width(),
+        fset=lambda self, value: self._set_marker_edge_width(value),
+        fdel=lambda self: self._del_marker_edge_width()
+    )
+
+    def _get_marker_face_color(self):
         return self._fake_it.get_markerfacecolor()
 
-    @marker_face_color.setter
-    def marker_face_color(self, value):
+    def _set_marker_face_color(self, value):
         self._fake_it.set_markerfacecolor(value)
 
-    @marker_face_color.deleter
-    def marker_face_color(self):
-        pass
+    def _del_marker_face_color(self):
+        log.warning('marker_face_color deleter is not implemented')
 
-    @property
-    def marker_size(self):
+    # noinspection PyPropertyDefinition
+    marker_face_color = property(
+        fget=lambda self: self._get_marker_face_color(),
+        fset=lambda self, value: self._set_marker_face_color(value),
+        fdel=lambda self: self._del_marker_face_color()
+    )
+
+    def _get_marker_size(self):
         return self._fake_it.get_markersize()
 
-    @marker_size.setter
-    def marker_size(self, value):
+    def _set_marker_size(self, value):
         self._fake_it.set_markersize(value)
 
-    @marker_size.deleter
-    def marker_size(self):
+    def _del_marker_size(self):
         self._fake_it.set_markersize(0)
 
-    @property
-    def style(self):
+    # noinspection PyPropertyDefinition
+    marker_size = property(
+        fget=lambda self: self._get_marker_size(),
+        fset=lambda self, value: self._set_marker_size(value),
+        fdel=lambda self: self._del_marker_size()
+    )
+
+    def _get_style(self):
         return self._fake_it.get_linestyle()
 
-    @style.setter
-    def style(self, value):
+    def _set_style(self, value):
         self._fake_it.set_linestyle(value)
 
-    @style.deleter
-    def style(self):
+    def _del_style(self):
         self._fake_it.set_linestyle('')
 
-    @property
-    def width(self):
+    # noinspection PyPropertyDefinition
+    style = property(
+        fget=lambda self: self._get_style(),
+        fset=lambda self, value: self._set_style(value),
+        fdel=lambda self: self._del_style()
+    )
+
+    def _get_width(self):
         """
         :return: Width of the line
         :rtype: float
         """
         return self._fake_it.get_linewidth()
 
-    @width.setter
-    def width(self, value):
+    def _set_width(self, value):
         """
         :param value: Width to set the line to.
         :type value: float, int
         """
         self._fake_it.set_linewidth(value)
 
-    @width.deleter
-    def width(self):
+    def _del_width(self):
         self._fake_it.set_linewidth(0)
+
+    # noinspection PyPropertyDefinition
+    width = property(
+        fget=lambda self: self._get_width(),
+        fset=lambda self, value: self._set_width(value),
+        fdel=lambda self: self._del_width()
+    )
