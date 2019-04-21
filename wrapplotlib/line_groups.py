@@ -1,5 +1,5 @@
 """
-Created: 4/10/2019
+Created: 4/21/2019
 Author: Emiliano Jordan,
         https://github.com/EmilianoJordan
         https://www.linkedin.com/in/emilianojordan/,
@@ -9,45 +9,38 @@ from typing import Union
 
 from matplotlib.lines import Line2D
 
+from .lines import WPL2DLine
 from . import log
-from .artists import WPLArtist
 
 
-class WPL2DLine(WPLArtist):
+class WPL2DLineGroup:
 
     def __init__(self,
                  figure: 'BaseFigure',
                  plot: 'BasePlot',
                  style_dict: Union[dict, None],
-                 line: Line2D):
+                 line: Union[WPL2DLine, Line2D]):
+
         self.figure = figure
         self.plot = plot
-        self._fake_it: Line2D = line
 
-        self.style_dict = style_dict
+        self._style_dict = style_dict
 
-    def __del__(self):
-        self._fake_it.remove()
-        super().__del__()
+        if isinstance(line, Line2D):
+            line = WPL2DLine(figure, plot, style_dict, line)
 
-    def __eq__(self, other: Union['WPL2DLine', Line2D]):
-        """
-        The equality of two lines is based solely on the data
-        that defines it.
-        """
-        # If the other instance is that of Line2D we can just check to
-        # see if the underlying matplotlib.line.Line2D structure
-        # saved in self._fake_it is the same.
-        if isinstance(other, Line2D):
-            return self._fake_it is other
-
-        return self._fake_it is other._fake_it
+        self._lines = [line]
+        self._label = line.label
 
     def _get_color(self):
-        return self._fake_it.get_color()
+        return self._style_dict.setdefault('color', self._lines[0].color)
 
     def _set_color(self, value):
-        self._fake_it.set_color(value)
+
+        for l in self._lines:
+            l.color = value
+
+        self._style_dict['color'] = value
 
     def _del_color(self):
         log.warning("color deleter is not implemented.")
@@ -59,41 +52,39 @@ class WPL2DLine(WPLArtist):
         fdel=lambda self: self._del_color()
     )
 
-    def _get_data(self):
-        return self._fake_it.get_data()
+    def _get_label(self):
+        self._label = self._lines[0].label
+        return self._label
 
-    def _set_data(self, value):
-        self._fake_it.set_data(value)
+    def _set_label(self, value):
+        self._lines[0].label = value
+        self._label = value
 
-    def _del_data(self):
-        log.warning(".data deleter hasn't been implemented.")
+    def _del_label(self):
+        del self._lines[0].label
+        self._label = self._lines[0].label
 
     # noinspection PyPropertyDefinition
-    data = property(
-        fget=lambda self: self._get_data(),
-        fset=lambda self, value: self._set_data(value),
-        fdel=lambda self: self._del_data()
+    label = property(
+        fget=lambda self: self._get_label(),
+        fset=lambda self, value: self._set_label(value),
+        fdel=lambda self: self._del_label()
     )
 
-    # Overrides the WPLArtist.label setter.
-    def _set_label(self, value):
-        super()._set_label(value)
-        self.plot.legend()
-
     def _get_marker(self):
-        return self._fake_it.get_marker()
+        return self._style_dict.setdefault('marker', self._lines[0].marker)
 
     def _set_marker(self, value):
-        """
-        Set the marker shape. To see a complete list of possible
-        markers: https://matplotlib.org/api/markers_api.html#module-matplotlib.markers
-        :param value: Marker shape value
-        :type value: str, int
-        """
-        self._fake_it.set_marker(value)
+        for l in self._lines:
+            l.marker = value
+
+        self._style_dict['marker'] = value
 
     def _del_marker(self):
-        self._fake_it.set_marker('')
+        for l in self._lines:
+            del l.marker
+
+        self._style_dict['marker'] = self._lines[0].marker
 
     # noinspection PyPropertyDefinition
     marker = property(
@@ -103,13 +94,13 @@ class WPL2DLine(WPLArtist):
     )
 
     def _get_marker_color(self):
-        if self.marker_face_color != self.marker_edge_color:
-            return self.marker_face_color, self.marker_edge_color
-        return self.marker_face_color
+        return self._style_dict.setdefault('marker_color', self._lines[0].marker_color)
 
     def _set_marker_color(self, value):
-        self._fake_it.set_markerfacecolor(value)
-        self._fake_it.set_markeredgecolor(value)
+        for l in self._lines:
+            l.marker_color = value
+
+        self._style_dict['marker_color'] = value
 
     def _del_marker_color(self):
         log.warning("marker_color deleter hasn't been implemented.")
@@ -122,13 +113,19 @@ class WPL2DLine(WPLArtist):
     )
 
     def _get_marker_edge_color(self):
-        return self._fake_it.get_markeredgecolor()
+        return self._style_dict.setdefault('marker_edge_color', self._lines[0].marker_edge_color)
 
     def _set_marker_edge_color(self, value):
-        self._fake_it.set_markeredgecolor(value)
+        for l in self._lines:
+            l.marker_edge_color = value
+
+        self._style_dict['marker_edge_color'] = value
 
     def _del_marker_edge_color(self):
-        self._fake_it.set_markeredgecolor(self.marker_face_color)
+        for l in self._lines:
+            del l.marker_edge_color
+
+        self._style_dict['marker_edge_color'] = self._lines[0].marker_edge_color
 
     # noinspection PyPropertyDefinition
     marker_edge_color = property(
@@ -138,13 +135,19 @@ class WPL2DLine(WPLArtist):
     )
 
     def _get_marker_edge_width(self):
-        return self._fake_it.get_markeredgewidth()
+        return self._style_dict.setdefault('marker_edge_width', self._lines[0].marker_edge_width)
 
     def _set_marker_edge_width(self, value):
-        self._fake_it.set_markeredgewidth(value)
+        for l in self._lines:
+            l.marker_edge_width = value
+
+        self._style_dict['marker_edge_width'] = value
 
     def _del_marker_edge_width(self):
-        self._fake_it.set_markeredgewidth(0)
+        for l in self._lines:
+            del l.marker_edge_width
+
+        self._style_dict['marker_edge_width'] = self._lines[0].marker_edge_width
 
     # noinspection PyPropertyDefinition
     marker_edge_width = property(
@@ -154,13 +157,19 @@ class WPL2DLine(WPLArtist):
     )
 
     def _get_marker_face_color(self):
-        return self._fake_it.get_markerfacecolor()
+        return self._style_dict.setdefault('marker_face_color', self._lines[0].marker_face_color)
 
     def _set_marker_face_color(self, value):
-        self._fake_it.set_markerfacecolor(value)
+        for l in self._lines:
+            l.marker_face_color = value
+
+        self._style_dict['marker_face_color'] = value
 
     def _del_marker_face_color(self):
-        self._fake_it.set_markerfacecolor(self.marker_edge_color)
+        for l in self._lines:
+            del l.marker_face_color
+
+        self._style_dict['marker_face_color'] = self._lines[0].marker_face_color
 
     # noinspection PyPropertyDefinition
     marker_face_color = property(
@@ -170,13 +179,19 @@ class WPL2DLine(WPLArtist):
     )
 
     def _get_marker_size(self):
-        return self._fake_it.get_markersize()
+        return self._style_dict.setdefault('marker_size', self._lines[0].marker_size)
 
     def _set_marker_size(self, value):
-        self._fake_it.set_markersize(value)
+        for l in self._lines:
+            l.marker_size = value
+
+        self._style_dict['marker_size'] = value
 
     def _del_marker_size(self):
-        self._fake_it.set_markersize(0)
+        for l in self._lines:
+            del l.marker_size
+
+        self._style_dict['marker_size'] = self._lines[0].marker_size
 
     # noinspection PyPropertyDefinition
     marker_size = property(
@@ -186,13 +201,19 @@ class WPL2DLine(WPLArtist):
     )
 
     def _get_style(self):
-        return self._fake_it.get_linestyle()
+        return self._style_dict.setdefault('style', self._lines[0].style)
 
     def _set_style(self, value):
-        self._fake_it.set_linestyle(value)
+        for l in self._lines:
+            l.style = value
+
+        self._style_dict['style'] = value
 
     def _del_style(self):
-        self._fake_it.set_linestyle('')
+        for l in self._lines:
+            del l.style
+
+        self._style_dict['style'] = self._lines[0].style
 
     # noinspection PyPropertyDefinition
     style = property(
@@ -202,18 +223,7 @@ class WPL2DLine(WPLArtist):
     )
 
     def _get_style_dict(self):
-        return {
-            'alpha': self.alpha,
-            'color': self.color,
-            'marker': self.marker,
-            'marker_edge_color': self.marker_edge_color,
-            'marker_edge_width': self.marker_edge_width,
-            'marker_face_color': self.marker_face_color,
-            'marker_size': self.marker_size,
-            'style': self.style,
-            'visible': self.visible,
-            'width': self.width,
-        }
+        return self._style_dict
 
     def _set_style_dict(self, value):
         if not isinstance(value, dict):
@@ -221,8 +231,10 @@ class WPL2DLine(WPLArtist):
                         'of attributes of wrapplotlib.lines.WPL2DLine'
                         'and values.')
 
-        for k, v in value.items():
-            setattr(self, k, v)
+        for l in self._lines:
+            l.style_dict = value
+
+        self._style_dict = value
 
     def _del_style_dict(self):
         log.warning('style_dict deleter is not implemented')
@@ -235,21 +247,19 @@ class WPL2DLine(WPLArtist):
     )
 
     def _get_width(self):
-        """
-        :return: Width of the line
-        :rtype: float
-        """
-        return self._fake_it.get_linewidth()
+        return self._style_dict.setdefault('width', self._lines[0].width)
 
     def _set_width(self, value):
-        """
-        :param value: Width to set the line to.
-        :type value: float, int
-        """
-        self._fake_it.set_linewidth(value)
+        for l in self._lines:
+            l.width = value
+
+        self._style_dict['width'] = value
 
     def _del_width(self):
-        self._fake_it.set_linewidth(0)
+        for l in self._lines:
+            del l.width
+
+        self._style_dict['width'] = self._lines[0].width
 
     # noinspection PyPropertyDefinition
     width = property(

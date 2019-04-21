@@ -19,7 +19,7 @@ class StyleMeta(metaclass=ABCMeta):
         and maintain the same internal state after being called.
 
         :return: Return a dict where the keys are attributes from
-        wrapplotlib.lines.WPLLine2D and values are valid for the
+        wrapplotlib.lines.WPL2DLine and values are valid for the
         associated attribute.
         :rtype: dict
         """
@@ -37,7 +37,7 @@ class StyleMeta(metaclass=ABCMeta):
         and maintain the same internal state after being called.
 
         :return: Return a dict where the keys are attributes from
-        wrapplotlib.lines.WPLLine2D and values are valid for the
+        wrapplotlib.lines.WPL2DLine and values are valid for the
         associated attribute.
         :rtype: dict
         """

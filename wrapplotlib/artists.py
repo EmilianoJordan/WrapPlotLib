@@ -33,6 +33,7 @@ class WPLArtist(FakeIt, metaclass=ABCMeta):
     def _del_label(self):
         self._fake_it.set_label(None)
 
+    # noinspection PyPropertyDefinition
     label = property(
         fget=lambda self: self._get_label(),
         fset=lambda self, value: self._set_label(value),
@@ -48,6 +49,7 @@ class WPLArtist(FakeIt, metaclass=ABCMeta):
     def _del_visible(self):
         self._fake_it.set_visible(False)
 
+    # noinspection PyPropertyDefinition
     visible = property(
         fget=lambda self: self._get_visible(),
         fset=lambda self, value: self._set_visible(value),
@@ -63,6 +65,7 @@ class WPLArtist(FakeIt, metaclass=ABCMeta):
     def _del_alpha(self):
         self._fake_it.set_alpha(0)
 
+    # noinspection PyPropertyDefinition
     alpha = property(
         fget=lambda self: self._get_alpha(),
         fset=lambda self, value: self._set_alpha(value),

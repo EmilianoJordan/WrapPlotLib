@@ -10,7 +10,7 @@ from matplotlib.axes import Axes
 
 from . import log
 from .artists import WPLArtist
-from .lines import WPLLine2D
+from .lines import WPL2DLine
 from .styles import BaseStyle, StyleMeta
 from .text import WPLText
 
@@ -60,9 +60,9 @@ class BasePlot(WPLArtist):
             **kwargs
         )
         if self._styler is None:
-            self._lines += [WPLLine2D(self.figure, self, None, l) for l in lines]
+            self._lines += [WPL2DLine(self.figure, self, None, l) for l in lines]
         else:
-            self._lines += [WPLLine2D(self.figure, self, self._styler(), l) for l in lines]
+            self._lines += [WPL2DLine(self.figure, self, self._styler(), l) for l in lines]
 
     def _get_line(self):
         return self.lines[-1]
@@ -161,5 +161,5 @@ class BasePlot(WPLArtist):
     def _sync_mpl_wpl_lines(self):
         for line in self._fake_it.lines:
             if line not in self._lines:
-                self._lines.append(WPLLine2D(self.figure, self,
+                self._lines.append(WPL2DLine(self.figure, self,
                                              None, line))

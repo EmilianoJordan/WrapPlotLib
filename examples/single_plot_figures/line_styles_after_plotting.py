@@ -2,7 +2,7 @@
 This is going to take advantage of the fact that in WrapPlotLib
 the most resent plotted line is stored into the plot.line attribute.
 It shows how to set line styles accessing the
-wrapplotlib.line.WPLLine2D object directly.
+wrapplotlib.line.WPL2DLine object directly.
 
 Created: 4/19/2019
 Author: Emiliano Jordan,
@@ -35,7 +35,7 @@ fig.plot.line.color = 'k'
 fig.plot.line.marker = ''
 
 # Also we can simply update the styles from a dictionary where the keys
-# are attributes in wrapplotlib.line.WPLLine2D and values are valid
+# are attributes in wrapplotlib.line.WPL2DLine and values are valid
 # values for the line.
 style_dict = {
     'color': 'k',
