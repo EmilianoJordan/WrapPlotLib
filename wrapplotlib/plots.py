@@ -6,6 +6,8 @@ Author: Emiliano Jordan,
         https://www.linkedin.com/in/emilianojordan/,
         Most other things I'm @emilianojordan
 """
+from typing import Union
+
 from matplotlib.axes import Axes
 
 from . import log
@@ -163,3 +165,6 @@ class BasePlot(WPLArtist):
             if line not in self._lines:
                 self._lines.append(WPL2DLine(self.figure, self,
                                              None, line))
+
+
+

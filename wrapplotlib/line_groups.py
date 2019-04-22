@@ -71,6 +71,24 @@ class WPL2DLineGroup:
         fdel=lambda self: self._del_label()
     )
 
+    def _get_lines(self):
+        return self._lines
+
+    def _set_lines(self, value):
+        self._lines = value
+
+    def _del_lines(self):
+        for l in self._lines:
+            del l
+        self._lines = []
+
+    # noinspection PyPropertyDefinition
+    lines = property(
+        fget=lambda self: self._get_lines(),
+        fset=lambda self, value: self._set_lines(value),
+        fdel=lambda self: self._del_lines()
+    )
+
     def _get_marker(self):
         return self._style_dict.setdefault('marker', self._lines[0].marker)
 
