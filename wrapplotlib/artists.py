@@ -24,6 +24,13 @@ class WPLArtist(FakeIt, metaclass=ABCMeta):
     """
     _fake_it: Artist
 
+    def __del__(self):
+        try:
+            self._fake_it.remove()
+        except NotImplementedError:
+            pass
+        del self._fake_it
+
     def _get_label(self):
         return self._fake_it.get_label()
 

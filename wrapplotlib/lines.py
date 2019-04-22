@@ -26,10 +26,6 @@ class WPL2DLine(WPLArtist):
 
         self.style_dict = style_dict
 
-    def __del__(self):
-        self._fake_it.remove()
-        super().__del__()
-
     def __eq__(self, other: Union['WPL2DLine', Line2D]):
         """
         The equality of two lines is based solely on the data

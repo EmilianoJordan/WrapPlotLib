@@ -10,6 +10,7 @@ matplotlib = "*"
 pytest = "*"
 opencv-python = "*"
 scikit-image = "*"
+click = "*"
 
 [requires]
 python_version = "3.6"

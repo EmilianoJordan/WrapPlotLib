@@ -48,6 +48,10 @@ class BaseFigure(WPLArtist):
     def __iter__(self):
         return (a for a in self._plots)
 
+    # def __getitem__(self, item):
+    #     for p in self._plots:
+    #
+
     def add_subplot(self, *args, styler=BaseStyle, **kwargs):
         """
         https://matplotlib.org/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure.add_subplot
