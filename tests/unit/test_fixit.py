@@ -1,10 +1,4 @@
 """
-Created: 4/4/2019
-Author: Emiliano Jordan,
-        https://github.com/EmilianoJordan
-        https://www.linkedin.com/in/emilianojordan/,
-        Most other things I'm @emilianojordan
-
 This is an important file to make sure that the FixIt Class is included
 in all the classes it should be. This is a sanity check.
 """
