@@ -1,10 +1,3 @@
-"""
-Created: 4/20/2019
-Author: Emiliano Jordan,
-        https://github.com/EmilianoJordan
-        https://www.linkedin.com/in/emilianojordan/,
-        Most other things I'm @emilianojordan
-"""
 from abc import ABCMeta
 from matplotlib.artist import Artist
 

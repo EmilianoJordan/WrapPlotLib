@@ -3,12 +3,6 @@ This is going to take advantage of the fact that in WrapPlotLib
 the most resent plotted line is stored into the plot.line attribute.
 It shows how to set line styles accessing the
 wrapplotlib.line.WPL2DLine object directly.
-
-Created: 4/19/2019
-Author: Emiliano Jordan,
-        https://github.com/EmilianoJordan
-        https://www.linkedin.com/in/emilianojordan/,
-        Most other things I'm @emilianojordan
 """
 from collections import namedtuple
 

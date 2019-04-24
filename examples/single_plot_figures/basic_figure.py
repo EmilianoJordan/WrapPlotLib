@@ -3,12 +3,6 @@ Create a single plot basic figure and load some data into it.
 The basic styling is not ideal for a data set like this and it's
 obvious. To see how to change a line format see
 line_styles_after_plotting.py or custom_styler.py
-
-Created: 3/20/2019
-Author: Emiliano Jordan,
-        https://github.com/EmilianoJordan
-        https://www.linkedin.com/in/emilianojordan/,
-        Most other things I'm @emilianojordan
 """
 from collections import namedtuple
 
