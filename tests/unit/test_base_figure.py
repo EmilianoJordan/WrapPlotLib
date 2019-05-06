@@ -25,3 +25,5 @@ def test_dir():
     pyplot_figure = plt.figure()
     assert set(pyplot_figure.__dir__()).issubset(fig.__dir__())
 
+
+

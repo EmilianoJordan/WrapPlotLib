@@ -1,6 +1,7 @@
 from collections import namedtuple
 import numpy as np
 import pytest
+import click
 
 from wrapplotlib.figures import SinglePlotFigure
 

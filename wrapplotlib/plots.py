@@ -41,10 +41,45 @@ class BasePlot(WPLArtist):
         self._styler = styler()
 
     def __call__(self, *args, scalex=True, scaley=True, **kwargs):
-        self.plot(*args, scalex=True, scaley=True, **kwargs)
+        return self.plot(*args, scalex=True, scaley=True, **kwargs)
 
     def __iter__(self):
         return (l for l in self.lines)
+
+    def __getitem__(self, item):
+        """
+        Lines can be accessed via their label as the key
+        of the plot.
+
+
+        :param item:
+        :type item:
+        :return:
+        :rtype:
+        """
+        for l in self.lines:
+            if l._label == item:
+                return l
+
+    def __setitem__(self, key, value):
+        """
+        Item access can be used to add a line with it's label
+        where the key is the label value and the value should
+        be a tuple or list x and y data:
+
+        See: examples/single_plot_figures/dictionary_like_setter.py
+
+        :param key:
+        :type key:
+        :param value:
+        :type value:
+        :return:
+        :rtype:
+        """
+        line = self.plot(*value)[0]
+
+        line.label = key
+
 
     def plot(self, *args, scalex=True, scaley=True, **kwargs):
         lines = self._fake_it.plot(
@@ -54,9 +89,14 @@ class BasePlot(WPLArtist):
             **kwargs
         )
         if self._styler is None:
-            self._lines += [WPL2DLine(self.figure, self, None, l) for l in lines]
+            wpl_lines = [WPL2DLine(self.figure, self, None, l) for l in lines]
+
         else:
-            self._lines += [WPL2DLine(self.figure, self, self._styler(), l) for l in lines]
+            wpl_lines = [WPL2DLine(self.figure, self, self._styler(), l) for l in lines]
+
+        self._lines += wpl_lines
+
+        return wpl_lines
 
     def _get_line(self):
         return self.lines[-1]
@@ -114,20 +154,20 @@ class BasePlot(WPLArtist):
         fdel=lambda self: self._del_styler()
     )
 
-    def _get_x_lim(self):
+    def _get_x_lims(self):
         return self._fake_it.get_xlim()
 
-    def _set_x_lim(self, value):
+    def _set_x_lims(self, value):
         self._fake_it.set_xlim(*value)
 
-    def _del_x_lim(self):
+    def _del_x_lims(self):
         log.warning("y_lim deleter is not yet implemented.")
 
     # noinspection PyPropertyDefinition
-    x_lim = property(
-        fget=lambda self: self._get_x_lim(),
-        fset=lambda self, value: self._set_x_lim(value),
-        fdel=lambda self: self._del_x_lim()
+    x_lims = property(
+        fget=lambda self: self._get_x_lims(),
+        fset=lambda self, value: self._set_x_lims(value),
+        fdel=lambda self: self._del_x_lims()
     )
 
     def _get_x_scale(self):
@@ -149,20 +189,20 @@ class BasePlot(WPLArtist):
         fdel=lambda self: self._del_x_scale()
     )
 
-    def _get_y_lim(self):
+    def _get_y_lims(self):
         return self._fake_it.get_ylim()
 
-    def _set_y_lim(self, value: Union[tuple, list]):
+    def _set_y_lims(self, value: Union[tuple, list]):
         self._fake_it.set_ylim(*value)
 
-    def _del_y_lim(self):
+    def _del_y_lims(self):
         log.warning("y_lim deleter is not yet implemented.")
 
     # noinspection PyPropertyDefinition
-    y_lim = property(
-        fget=lambda self: self._get_y_lim(),
-        fset=lambda self, value: self._set_y_lim(value),
-        fdel=lambda self: self._del_y_lim()
+    y_lims = property(
+        fget=lambda self: self._get_y_lims(),
+        fset=lambda self, value: self._set_y_lims(value),
+        fdel=lambda self: self._del_y_lims()
     )
 
     def _get_y_scale(self):
