@@ -114,6 +114,22 @@ class BasePlot(WPLArtist):
         fdel=lambda self: self._del_styler()
     )
 
+    def _get_x_lim(self):
+        return self._fake_it.get_xlim()
+
+    def _set_x_lim(self, value):
+        self._fake_it.set_xlim(*value)
+
+    def _del_x_lim(self):
+        log.warning("y_lim deleter is not yet implemented.")
+
+    # noinspection PyPropertyDefinition
+    x_lim = property(
+        fget=lambda self: self._get_x_lim(),
+        fset=lambda self, value: self._set_x_lim(value),
+        fdel=lambda self: self._del_x_lim()
+    )
+
     def _get_x_scale(self):
         return self._type[0]
 
@@ -131,6 +147,22 @@ class BasePlot(WPLArtist):
         fget=lambda self: self._get_x_scale(),
         fset=lambda self, value: self._set_x_scale(value),
         fdel=lambda self: self._del_x_scale()
+    )
+
+    def _get_y_lim(self):
+        return self._fake_it.get_ylim()
+
+    def _set_y_lim(self, value: Union[tuple, list]):
+        self._fake_it.set_ylim(*value)
+
+    def _del_y_lim(self):
+        log.warning("y_lim deleter is not yet implemented.")
+
+    # noinspection PyPropertyDefinition
+    y_lim = property(
+        fget=lambda self: self._get_y_lim(),
+        fset=lambda self, value: self._set_y_lim(value),
+        fdel=lambda self: self._del_y_lim()
     )
 
     def _get_y_scale(self):
@@ -158,5 +190,29 @@ class BasePlot(WPLArtist):
                 self._lines.append(WPL2DLine(self.figure, self,
                                              None, line))
 
+    def update_axis_limits(self):
+        x_min = self._fake_it.dataLim.x0
+        x_max = self._fake_it.dataLim.x1
+        y_min = self._fake_it.dataLim.y0
+        y_max = self._fake_it.dataLim.y1
 
+        for l in self.lines:
+            x_min = min(x_min, min(l.data[0]))
+            x_max = max(x_max, max(l.data[0]))
+            y_min = min(y_min, min(l.data[1]))
+            y_max = max(y_max, max(l.data[1]))
 
+        self._fake_it.dataLim.x0 = x_min
+        self._fake_it.dataLim.x1 = x_max
+        self._fake_it.dataLim.y0 = y_min
+        self._fake_it.dataLim.y1 = y_max
+
+        self._fake_it.autoscale_view(scalex=True, scaley=True)
+
+    # def update_limits_from_line(self, line: WPL2DLine):
+    #     self._fake_it.dataLim.x0 = min(self._fake_it.dataLim.x0, min(line.data[0]))
+    #     self._fake_it.dataLim.x1 = max(self._fake_it.dataLim.x1, max(line.data[0]))
+    #     self._fake_it.dataLim.y0 = min(self._fake_it.dataLim.y0, min(line.data[1]))
+    #     self._fake_it.dataLim.y1 = max(self._fake_it.dataLim.y1, max(line.data[1]))
+    #
+    #     self._fake_it.autoscale_view(scalex=True, scaley=True)

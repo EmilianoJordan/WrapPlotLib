@@ -12,7 +12,7 @@ from wrapplotlib.styles import StyleMeta
 
 class CustomStyle(StyleMeta):
     """
-    This simple Custom Styler will only ever yield a black line.
+    This Custom Styler will only ever yield a black line.
 
     For a more complex implementation of a Custom Styler see
     wrapplotlib.styles.BaseStyle

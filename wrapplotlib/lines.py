@@ -53,6 +53,7 @@ class WPL2DLine(WPLArtist):
 
     def _set_data(self, value):
         self._fake_it.set_data(value)
+        self.plot.update_axis_limits()
 
     def _del_data(self):
         log.warning(".data deleter hasn't been implemented.")
