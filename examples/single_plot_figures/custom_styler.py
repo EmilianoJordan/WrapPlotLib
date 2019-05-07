@@ -1,6 +1,6 @@
 """
 This is a simple file to show how to create a figure class with a plot
-that overrides the base styler created in wrapplotlib.styles.BaseStyle.
+that overrides the base styler created in wrapplotlib.styles.BaseLineStyle.
 """
 from collections import namedtuple
 
@@ -15,7 +15,7 @@ class CustomStyle(StyleMeta):
     This Custom Styler will only ever yield a black line.
 
     For a more complex implementation of a Custom Styler see
-    wrapplotlib.styles.BaseStyle
+    wrapplotlib.styles.BaseLineStyle
 
     """
     style_map = {

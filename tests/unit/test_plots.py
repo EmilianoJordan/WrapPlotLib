@@ -81,4 +81,11 @@ def test_item_getter():
 
     assert line == lines[0]
 
+
 def test_item_setter():
+    data = np.array(range(5))
+
+    fig = SinglePlotFigure()
+    fig.plot['Test'] = (data, data)
+
+    assert fig.plot.line == fig.plot['Test']

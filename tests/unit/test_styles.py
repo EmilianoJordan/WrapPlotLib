@@ -1,8 +1,8 @@
-from wrapplotlib.styles import BaseStyle
+from wrapplotlib.styles import BaseLineStyle
 
 
 def test_base_style_initialization():
-    s = BaseStyle()
+    s = BaseLineStyle()
 
     # Both s and the call to s() should be iterable.
     assert iter(s())
@@ -10,7 +10,7 @@ def test_base_style_initialization():
 
 
 def test_base_style_output():
-    s = BaseStyle()
+    s = BaseLineStyle()
     test_styles = {
         'color': (0.0, 0.0, 1.0, 1.0),
         'line_width': 1,

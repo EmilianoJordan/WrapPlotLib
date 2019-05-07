@@ -50,9 +50,9 @@ class StyleMeta(metaclass=ABCMeta):
         pass
 
 
-class BaseStyle(StyleMeta):
+class BaseLineStyle(StyleMeta):
     """
-    I believe BaseStyle is a perfect chance to learn metaclasses...
+    I believe BaseLineStyle is a perfect chance to learn metaclasses...
     But ABCs confuse me. Need to learn more about those.
     """
     colors = (

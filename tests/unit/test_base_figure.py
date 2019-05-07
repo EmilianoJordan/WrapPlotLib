@@ -10,6 +10,7 @@ def test_basic_initialization(shock_data):
     a.plot(shock_data.time, shock_data.acceleration)
     a.set_title("Basic Shock")
 
+
 def test_dir():
     """
     verify the functionality of the base figure dir

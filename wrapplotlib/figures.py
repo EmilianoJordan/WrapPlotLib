@@ -1,10 +1,11 @@
+from typing import Union
+
 from matplotlib import use, get_backend
 from matplotlib import pyplot as plt
 
-from ._mixins import FakeIt
 from .artists import WPLArtist
-from .plots import BasePlot
-from .styles import BaseStyle
+from .plots import BasePlot, BaseGroupPlot, BaseLinePlot
+from .styles import BaseLineStyle
 from .text import WPLText
 
 
@@ -40,15 +41,22 @@ class BaseFigure(WPLArtist):
     def __iter__(self):
         return (a for a in self._plots)
 
-    # def __getitem__(self, item):
-    #     for p in self._plots:
-    #
+    def __getitem__(self, item):
+        for p in self._plots:
+            if item == p.label:
+                return p
 
-    def add_subplot(self, *args, styler=BaseStyle, **kwargs):
+    def add_subplot(self,
+                    *args,
+                    plot_type = BaseLinePlot,
+                    styler=BaseLineStyle,
+                    **kwargs):
         """
         https://matplotlib.org/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure.add_subplot
         :param args:
         :type args:
+        :param plot_type:
+        :type plot_type:
         :param styler:
         :type styler:
         :param kwargs:
@@ -56,7 +64,7 @@ class BaseFigure(WPLArtist):
         :return:
         :rtype:
         """
-        axis = BasePlot(self, self._fake_it.add_subplot(*args, **kwargs), styler=styler)
+        axis = plot_type(self, self._fake_it.add_subplot(*args, **kwargs), styler=styler)
         self._plots.append(axis)
         return axis
 
@@ -95,8 +103,32 @@ class SinglePlotFigure(BaseFigure):
     def __init__(self, backend="Qt5Agg", *args, **kwargs):
         super().__init__(backend, *args, **kwargs)
 
-        self.add_subplot(1,1,1)
+        self.add_subplot(1, 1, 1)
 
     @property
     def plot(self):
         return self._plots[-1]
+
+
+class SingleGroupPlotFigure(BaseFigure):
+
+    def __init__(self, backend="Qt5Agg", *args, **kwargs):
+        super().__init__(backend, *args, **kwargs)
+
+        self.add_subplot(1, 1, 1)
+
+    @property
+    def plot(self):
+        return self._plots[-1]
+
+    def add_subplot(self,
+                    *args,
+                    plot_type=BaseGroupPlot,
+                    styler=BaseLineStyle,
+                    **kwargs):
+        return super(SingleGroupPlotFigure, self).add_subplot(
+            *args,
+            plot_type=BaseGroupPlot,
+            styler=BaseLineStyle,
+            **kwargs
+        )
