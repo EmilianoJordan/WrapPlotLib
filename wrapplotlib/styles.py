@@ -64,6 +64,7 @@ class BaseLineStyle(StyleMeta):
         (0.75, 0.75, 0.0, 1.0),
         (0.0, 0.0, 0.0, 1.0),
     )
+
     markers = (
         "o",
         "D",

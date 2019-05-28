@@ -4,7 +4,7 @@ from matplotlib.artist import Artist
 from ._mixins import FakeIt
 
 
-class WPLArtist(FakeIt, metaclass=ABCMeta):
+class WPLArtist(FakeIt):
     """
     The WPLArtist class is never meant to be initialized itself.
     It provides some basic attributes to all classes that subclass the
@@ -15,8 +15,6 @@ class WPLArtist(FakeIt, metaclass=ABCMeta):
     .alpha
 
     """
-    _fake_it: Artist
-
     def __del__(self):
         try:
             self._fake_it.remove()

@@ -9,8 +9,10 @@ import numpy as np
 
 from wrapplotlib.figures import SinglePlotFigure
 
-data = np.array(range(5))
+x_data = np.array(range(5))
+y_data = 1 + x_data * 2
 
 fig = SinglePlotFigure()
-fig.plot['Test'] = (data, data)
+fig.plot['Test'] = x_data, y_data
+
 fig.show()

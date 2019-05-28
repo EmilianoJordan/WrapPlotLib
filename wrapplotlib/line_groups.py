@@ -11,19 +11,52 @@ class WPL2DLineGroup:
     def __init__(self,
                  figure: 'BaseFigure',
                  plot: 'BasePlot',
-                 style_dict: Union[dict, None],
-                 line: Union[WPL2DLine, Line2D]):
+                 style_dict: Union[dict, None] = None,
+                 line: Union[WPL2DLine, Line2D, None] = None
+                 ):
 
         self.figure = figure
         self.plot = plot
+        self._style_dict = None if style_dict is None else style_dict.copy()
+        self._label = None
+        self._lines = []
 
-        self._style_dict = style_dict
+        if line is None:
+            return
 
         if isinstance(line, Line2D):
             line = WPL2DLine(figure, plot, style_dict, line)
 
-        self._lines = [line]
-        self._label = line.label
+        self._lines.append(line)
+        self.label = line.label
+
+    def __call__(self, line, *args, label=None, **kwargs):
+
+        if isinstance(line, Line2D):
+            line = WPL2DLine(self.figure, self.plot, self._style_dict, line)
+
+        self._lines.append(line)
+
+        if label is None:
+            label = line.label
+        elif line.lable != label:
+            log.warning(f"Line has a label of {line.label}, "
+                        f"{self.__class__} was called with a label of "
+                        f"'{label}'. To resolve this conflict {label} is "
+                        f"being used as the value of the line label")
+
+        del line.label
+
+        if self.label == label:
+            return line
+
+        if self.label is None:
+            self.label = label
+            return line
+
+        log.warning(f"The newly added line does not match the label in "
+                    f"{self.__class__} and will be over ridden.")
+
 
     def _get_color(self):
         return self._style_dict.setdefault('color', self._lines[0].color)
@@ -50,8 +83,14 @@ class WPL2DLineGroup:
         return self._label
 
     def _set_label(self, value):
-        self._lines[0].label = value
+
+        if value[0] == '_':
+            self._label = '_'
+            self._lines[0].label = value
+            return
+
         self._label = value
+        self._lines[0].label = value
 
     def _del_label(self):
         del self._lines[0].label

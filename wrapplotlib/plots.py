@@ -4,6 +4,7 @@ from matplotlib.axes import Axes
 
 from . import log
 from .artists import WPLArtist
+from .line_groups import WPL2DLineGroup
 from .lines import WPL2DLine
 from .styles import BaseLineStyle, StyleMeta
 from .text import WPLText
@@ -177,7 +178,7 @@ class BaseLinePlot(BasePlot):
 
     def _set_line(self, value):
         log.warning("line setter is not implemented as this is"
-                    "an internally tracked variable.")
+                    "an internally tracked attribute.")
 
     def _del_line(self):
         del self.lines[-1]
@@ -259,7 +260,7 @@ class BaseGroupPlot(BasePlot):
     def __init__(self, figure, axis, styler=BaseLineStyle):
         super(BaseGroupPlot, self).__init__(figure, axis)
 
-        self._line_groups = []
+        self._line_groups = {}
         self._styler = styler()
 
         '''
@@ -270,10 +271,9 @@ class BaseGroupPlot(BasePlot):
         self._fake_it.legend()
 
     def __call__(self, *args, label=None, scalex=True, scaley=True, **kwargs):
-
-        if label is None or label == '':
-            log.warning('A Label must be supplied when plotting with '
-                        'wrapplotlib.plots.BaseGroupPlot')
+        # if label is None or label == '':
+        #     log.warning('A Label must be supplied when plotting with '
+        #                 'wrapplotlib.plots.BaseGroupPlot')
 
         return self.plot(*args, scalex=True, scaley=True, **kwargs)
 
@@ -288,13 +288,11 @@ class BaseGroupPlot(BasePlot):
         :return:
         :rtype:
         """
-        for l in self._line_groups:
-            if l.label == item:
-                return l
+        self.sync_line_groups()
 
     def __setitem__(self, key, value):
         """
-        Item access can be used to add a line with it's label
+        Item access can be used to add a line with its label
         where the key is the label value and the value should
         be a tuple or list x and y data:
 
@@ -307,6 +305,49 @@ class BaseGroupPlot(BasePlot):
         :return:
         :rtype:
         """
-        for l in self._line_groups:
-            if l.label == key:
-                break
+        self.plot(*value, label=key)
+
+    def plot(self, *args, scalex=True, scaley=True, **kwargs):
+        lines = self._fake_it.plot(
+            *args,
+            scalex=scalex,
+            scaley=scaley,
+            **kwargs
+        )
+        wpl_lines = []
+
+        for line in lines:
+            '''
+            self._line_groups is a dictionary of callable WPL2DLineGroup
+            objects and their labels as keys.
+            
+            This adds the line to a WPL2DLineGroup by calling the object.
+            if the dictionary item does not exist a new one is created
+            using setdefault() and then called. 
+            '''
+            try:
+                wpl_lines.append(self._line_groups[line._label](line))
+            except KeyError:
+                line_group = WPL2DLineGroup(self.figure,
+                                            self,
+                                            self._styler()
+                                            )
+                self._line_groups[line._label] = line_group
+
+                wpl_lines.append(line_group(line))
+
+        return wpl_lines
+
+
+def _sync_mpl_wpl_line_groups(self):
+    """
+    @TODO need to implement this
+    This is a function that should look at all the labels of the
+    lines in the line group and then sorts them to make sure there
+    in the proper grouping.
+
+    It should be called before any access to a line group is give.
+    :return:
+    :rtype:
+    """
+    pass
