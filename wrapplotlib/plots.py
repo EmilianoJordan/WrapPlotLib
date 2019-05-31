@@ -288,7 +288,8 @@ class BaseGroupPlot(BasePlot):
         :return:
         :rtype:
         """
-        self.sync_line_groups()
+        self._sync_mpl_wpl_line_groups()
+        return self._line_groups[item]
 
     def __setitem__(self, key, value):
         """
@@ -339,15 +340,15 @@ class BaseGroupPlot(BasePlot):
         return wpl_lines
 
 
-def _sync_mpl_wpl_line_groups(self):
-    """
-    @TODO need to implement this
-    This is a function that should look at all the labels of the
-    lines in the line group and then sorts them to make sure there
-    in the proper grouping.
+    def _sync_mpl_wpl_line_groups(self):
+        """
+        @TODO need to implement this
+        This is a function that should look at all the labels of the
+        lines in the line group and then sorts them to make sure there
+        in the proper grouping.
 
-    It should be called before any access to a line group is give.
-    :return:
-    :rtype:
-    """
-    pass
+        It should be called before any access to a line group is give.
+        :return:
+        :rtype:
+        """
+        pass

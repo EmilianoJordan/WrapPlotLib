@@ -37,8 +37,9 @@ fig.plot.title = "Shock Data"
 fig.plot.x_label = "Time (s)"
 fig.plot.y_label = "Acceleration (G)"
 
-# Edit the style of the line the last plotted line is always stored in
-# the plot's line attribute. Therefor we can easily access the lines.
+# Edit style of the line. The last plotted line is always stored in
+# the plot's line attribute. Therefor we can easily access lines as they
+# are plotted.
 fig.plot.line.color = 'k'
 fig.plot.line.marker = ''
 fig.show()
@@ -53,3 +54,64 @@ attributes.
 
 Work is ongoing but there is a way to insert custom style generators
 so that the lines are controllable by you in an OOP, pythonic way.
+
+## WPL Grouped Lines Example
+
+One of the things that continues to bother me after years of working
+with MATLAB and Matplotlib is the fact that it's tedious to group
+lines together under one legend. I know an inline if statement can be
+used to control the legend yet I'd prefer to have an object to control
+line groups. This way it would be simple to extend the line group to
+include other features like averages or 95% CI. 
+(More tutorials coming on that soon.)
+
+```python
+import numpy as np
+
+from wrapplotlib.figures import SingleGroupPlotFigure
+
+# First let's create some sample data.
+data_time = np.array(range(10))
+
+data_x_axis = data_time
+data_y_axis = data_time + 5
+data_z_axis = data_time * 3
+
+# Normally in my use cases this would be stored in data files pulled
+# from sensors but for now storing them as a list demonstrates the 
+# looping functionality.
+tests = [
+    {
+        'time': data_time,
+        'x_axis': data_x_axis,
+        'y_axis': data_y_axis,
+        'z_axis': data_z_axis,
+    },
+    {
+        'time': data_time,
+        'x_axis': data_x_axis * 0.95,
+        'y_axis': data_y_axis * 0.95,
+        'z_axis': data_z_axis * 0.95,
+    },
+    {
+        'time': data_time,
+        'x_axis': data_x_axis * 1.05,
+        'y_axis': data_y_axis * 1.05,
+        'z_axis': data_z_axis * 1.05,
+    },
+]
+
+fig = SingleGroupPlotFigure()
+
+for test in tests:
+    # By using the plot's item functionality we can group lines
+    # together under the same label.
+    fig.plot['X-Axis'] = test['time'], test['x_axis']
+    fig.plot['Y-Axis'] = test['time'], test['y_axis']
+    fig.plot['Z-Axis'] = test['time'], test['z_axis']
+
+fig.show()
+
+```
+
+![Basic Plot](https://raw.githubusercontent.com/EmilianoJordan/WrapPlotLib/master/examples/single_plot_figures/images/grouped_lines.png)
