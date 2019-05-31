@@ -114,4 +114,4 @@ fig.show()
 
 ```
 
-![Basic Plot](https://raw.githubusercontent.com/EmilianoJordan/WrapPlotLib/master/examples/single_plot_figures/images/grouped_lines.png)
+![Grouped Lines Plot](https://raw.githubusercontent.com/EmilianoJordan/WrapPlotLib/master/examples/single_plot_figures/images/grouped_lines.png)
