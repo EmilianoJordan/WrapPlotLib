@@ -25,11 +25,16 @@ class _Signal(object):
 
             # args will have the 'self' argument. Remove it if the
             # called method object is the same as the signal object.
+            # If the method was added using a decorator obj is None.
             if obj is not None and args[0] is obj:
                 args.pop(0)
 
             for p in inspect.signature(func).parameters.values():
-                if p.default is p.empty:  # Build args
+                if p.kind is p.VAR_POSITIONAL:
+                    sig_args += args
+                elif p.kind is p.VAR_KEYWORD:
+                    sig_kwargs = {**kwargs, **sig_kwargs}
+                elif p.default is p.empty:  # Build args
                     sig_args.append(args.pop(0))
                 elif p.name in kwargs:  # build kwargs
                     sig_kwargs[p.name] = kwargs[p.name]
@@ -43,6 +48,7 @@ class _Signal(object):
 
     def connect(self, slot):
 
+        # ismethod will return false if using the decorator
         obj = None if not inspect.ismethod(slot) else slot.__self__
         self.slots.add((obj, slot))
 

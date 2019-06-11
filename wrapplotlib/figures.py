@@ -4,6 +4,7 @@ from matplotlib import use, get_backend
 from matplotlib import pyplot as plt
 
 from .artists import WPLArtist
+from .decorators import add_hooks
 from .plots import BasePlot, BaseGroupPlot, BaseLinePlot
 from .styles import BaseLineStyle
 from .text import WPLText
@@ -74,6 +75,7 @@ class BaseFigure(WPLArtist):
     def save(self, *args, **kwargs):
         return self._fake_it.savefig(*args, **kwargs)
 
+    @add_hooks
     def show(self, close_on_user_input=False):
 
         if close_on_user_input:

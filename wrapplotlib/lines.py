@@ -68,7 +68,7 @@ class WPL2DLine(WPLArtist):
     # Overrides the WPLArtist.label setter.
     def _set_label(self, value):
         super()._set_label(value)
-        self.plot.legend()
+        # self.plot.legend()
 
     def _get_marker(self):
         return self._fake_it.get_marker()

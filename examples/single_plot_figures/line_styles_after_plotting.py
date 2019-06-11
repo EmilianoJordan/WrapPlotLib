@@ -35,6 +35,6 @@ style_dict = {
     'color': 'k',
     'marker': ''
 }
-fig.plot.line.apply_styles_from_dict(style_dict)
+fig.plot.line.style_dict = style_dict
 
 fig.show()

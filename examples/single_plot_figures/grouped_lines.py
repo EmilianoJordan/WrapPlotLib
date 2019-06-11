@@ -69,5 +69,5 @@ fig.plot['Y-Axis'].marker = 'D'
 fig.plot['Z-Axis'].marker = 'X'
 
 fig.plot['X-Axis'].color = 'k'
-
+fig.plot.legend()
 fig.show()

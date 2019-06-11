@@ -4,6 +4,7 @@ from matplotlib.axes import Axes
 
 from . import log
 from .artists import WPLArtist
+from .decorators import add_hooks
 from .line_groups import WPL2DLineGroup
 from .lines import WPL2DLine
 from .styles import BaseLineStyle, StyleMeta
@@ -263,12 +264,7 @@ class BaseGroupPlot(BasePlot):
         self._line_groups = {}
         self._styler = styler()
 
-        '''
-        Legend is always turned on for GroupLinePlots  if you're not
-        going to use a legend the easiest way is just to use the LinePlot
-        class.
-        '''
-        self._fake_it.legend()
+        self.figure.show.pre.connect(lambda : self._fake_it.legend)
 
     def __call__(self, *args, label=None, scalex=True, scaley=True, **kwargs):
         # if label is None or label == '':
@@ -338,7 +334,6 @@ class BaseGroupPlot(BasePlot):
                 wpl_lines.append(line_group(line))
 
         return wpl_lines
-
 
     def _sync_mpl_wpl_line_groups(self):
         """
