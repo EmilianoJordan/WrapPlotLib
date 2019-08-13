@@ -6,8 +6,10 @@ Author: Emiliano Jordan,
         Most other things I'm @emilianojordan
 """
 import os
+from pathlib import Path
 import sys
 from setuptools import setup, find_packages
+
 
 # Borrowed heavily from Django and Requests
 # https://github.com/django/django/blob/master/setup.py
@@ -32,7 +34,7 @@ install it on Python {}.{}.
 """.format(*REQUIRED_PYTHON, *CURRENT_PYTHON))
     sys.exit(1)
 
-here = os.path.abspath(os.path.dirname(__file__))
+HERE = Path(__file__).parent
 
 about = {}
 exec(read('wrapplotlib', '__version__.py'), about)
@@ -40,13 +42,22 @@ exec(read('wrapplotlib', '__version__.py'), about)
 setup(
     author=about['__author__'],
     author_email=about['__author_email__'],
+    classifiers=[
+        "License :: OSI Approved :: Apache License 2.0",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        'Topic :: Scientific/Engineering :: Visualization',
+    ],
     description=about['__description__'],
     install_require=[
         'matplotlib>=3.0.3'
     ],
-    long_description = read('README.md'),
-    long_description_content_type = 'text/markdown',
-    name=about['__title__'],
+    license=about['__licence__'],
+    long_description=read('README.md'),
+    long_description_content_type='text/markdown',
+    name=about['__name__'],
     packages=find_packages(),
     project_urls={
         'Source': 'https://github.com/EmilianoJordan/WrapPlotLib/',
