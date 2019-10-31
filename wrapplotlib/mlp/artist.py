@@ -3,9 +3,17 @@
 # Project: WrapPlotLib
 from matplotlib.artist import Artist
 
+from .. import settings
 
-class WPLArtist(Artist):
-    
+class WplArtist(Artist):
+
+    def __int__(self, args):
+        # noinspection PyUnresolvedReferences
+        super().__int__()
+
+        self._sketch = settings.path.sketch
+        self._path_effects = settings.path.effects
+
     def _get_label(self):
         return self.get_label()
 
