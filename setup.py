@@ -51,8 +51,10 @@ setup(
         'Topic :: Scientific/Engineering :: Visualization',
     ],
     description=about['__description__'],
-    install_require=[
-        'matplotlib>=3.0.3'
+    install_requires=[
+        'matplotlib>=3.1.2',
+        'pandas>=0.25.3',
+        'sejings'
     ],
     license=about['__licence__'],
     long_description=read('README.md'),

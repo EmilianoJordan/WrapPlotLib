@@ -1,69 +1,11 @@
 
-from sejings import Sejings as Settings, extract_sejings as extract_settings
+from sejings import Sejings as Settings
 from matplotlib import rcParams
 
-__all__ = ['settings', 'extract_settings']
+__all__ = ['settings']
 
 settings = Settings()
 
-
-settings._internal = Settings()
-settings.agg = Settings()
-settings.agg.path = Settings()
-settings.animation = Settings()
-settings.axes = Settings()
-settings.axes.formatter = Settings()
-settings.axes.grid = Settings()
-settings.axes.spines = Settings()
-settings.axes3d = Settings()
-settings.backend = Settings()
-settings.boxplot = Settings()
-settings.boxplot.boxprops = Settings()
-settings.boxplot.capprops = Settings()
-settings.boxplot.flierprops = Settings()
-settings.boxplot.meanprops = Settings()
-settings.boxplot.medianprops = Settings()
-settings.boxplot.whiskerprops = Settings()
-settings.contour = Settings()
-settings.date = Settings()
-settings.date.autoformatter = Settings()
-settings.docstring = Settings()
-settings.errorbar = Settings()
-settings.examples = Settings()
-settings.figure = Settings()
-settings.figure.constrained_layout = Settings()
-settings.figure.subplot = Settings()
-settings.font = Settings()
-settings.grid = Settings()
-settings.hatch = Settings()
-settings.hist = Settings()
-settings.image = Settings()
-settings.keymap = Settings()
-settings.legend = Settings()
-settings.lines = Settings()
-settings.markers = Settings()
-settings.mathtext = Settings()
-settings.patch = Settings()
-settings.path = Settings()
-settings.pdf = Settings()
-settings.pgf = Settings()
-settings.polaraxes = Settings()
-settings.ps = Settings()
-settings.ps.distiller = Settings()
-settings.savefig = Settings()
-settings.scatter = Settings()
-settings.svg = Settings()
-settings.text = Settings()
-settings.text.latex = Settings()
-settings.tk = Settings()
-settings.verbose = Settings()
-settings.webagg = Settings()
-settings.xtick = Settings()
-settings.xtick.major = Settings()
-settings.xtick.minor = Settings()
-settings.ytick = Settings()
-settings.ytick.major = Settings()
-settings.ytick.minor = Settings()
 
 settings._internal.classic_mode = rcParams["_internal.classic_mode"]
 settings.agg.path.chunksize = rcParams["agg.path.chunksize"]
@@ -364,3 +306,4 @@ settings.ytick.minor.size = rcParams["ytick.minor.size"]
 settings.ytick.minor.visible = rcParams["ytick.minor.visible"]
 settings.ytick.minor.width = rcParams["ytick.minor.width"]
 settings.ytick.right = rcParams["ytick.right"]
+

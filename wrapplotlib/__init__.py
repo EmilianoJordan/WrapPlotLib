@@ -2,4 +2,4 @@
 # Author:  Emiliano Jordan
 # Project: WrapPlotLib
 
-from wrapplotlib.settings import settings
+from .settings import settings
